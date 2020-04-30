@@ -22,18 +22,24 @@ export default class Registration extends React.Component {
         );
     }
 
-    register() {
+    register(e) {
+        e.preventDefault();
         console.log("About to register: ", this.state);
-        axios.post("/register", this.state).then(({ data }) => {
-            console.log("Response: ", data);
-            if (data.success) {
-                location.replace("/");
-            } else {
-                this.setState({
-                    error: true,
-                });
-            }
-        });
+        axios
+            .post("/register", this.state)
+            .then(({ data }) => {
+                console.log("Response: ", data);
+                if (data.success) {
+                    location.replace("/");
+                } else {
+                    this.setState({
+                        error: true,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log("Error in axios.post '/register': ", err);
+            });
     }
 
     render() {
@@ -45,7 +51,7 @@ export default class Registration extends React.Component {
                 <input name="last" type="text" placeholder="Last name" />
                 <input name="email" type="email" placeholder="Email" />
                 <input name="password" type="password" placeholder="Password" />
-                <button onClick={() => this.register()}>Register</button>
+                <button onClick={(e) => this.register(e)}>Register</button>
             </div>
         );
     }

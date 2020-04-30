@@ -45,16 +45,6 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-// GET /
-
-app.get("*", (req, res) => {
-    if (!req.session.userId) {
-        res.redirect("/welcome");
-    } else {
-        res.sendFile(__dirname + "/index.html");
-    }
-});
-
 // POST /register
 
 app.post("/register", (req, res) => {
@@ -65,13 +55,23 @@ app.post("/register", (req, res) => {
             return db.register(first, last, email, hashedPw);
         })
         .then(({ rows }) => {
-            req.session.userID = rows[0].id;
+            req.session.userId = rows[0].id;
             console.log("This is the session object: ", req.session);
             res.json({ success: true });
         })
         .catch((err) => {
             console.log("Error in POST /register in index.js: ", err);
         });
+});
+
+// GET /
+
+app.get("*", (req, res) => {
+    if (!req.session.userId) {
+        res.redirect("/welcome");
+    } else {
+        res.sendFile(__dirname + "/index.html");
+    }
 });
 
 app.listen(8080, function () {
