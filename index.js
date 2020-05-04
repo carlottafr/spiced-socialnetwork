@@ -5,6 +5,8 @@ const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
 const csurf = require("csurf");
+const cryptoRandomString = require("crypto-random-string");
+const ses = require("./ses");
 
 app.use(compression());
 
@@ -71,6 +73,71 @@ app.post("/register", (req, res) => {
         })
         .catch((err) => {
             console.log("Error in POST /register in index.js: ", err);
+        });
+});
+
+// POST /password/reset/start
+
+app.post("/password/reset/start", (req, res) => {
+    let { email } = req.body;
+    db.login(email)
+        .then(({ rows }) => {
+            const secretCode = cryptoRandomString({
+                length: 6,
+            });
+            db.addCode(rows[0].email, secretCode)
+                .then(({ rows }) => {
+                    let to = rows[0].email;
+                    let subject = "Reset Password";
+                    let text =
+                        "This is the secret code for your password reset, use it within 10 minutes: " +
+                        secretCode;
+                    ses.sendEmail(to, subject, text)
+                        .then(() => {
+                            res.json({ success: true });
+                        })
+                        .catch((err) => {
+                            console.log("Error in ses.sendEmail: ", err);
+                            res.json({ success: false });
+                        });
+                })
+                .catch((err) => {
+                    console.log("Error in db.addCode: ", err);
+                    res.json({ success: false });
+                });
+        })
+        .catch((err) => {
+            console.log("Error in db.login: ", err);
+            res.json({ mailerror: true });
+        });
+});
+
+// POST /password/reset/verify
+
+app.post("/password/reset/verify", (req, res) => {
+    let { email, code, password } = req.body;
+    db.checkCode(email)
+        .then(({ rows }) => {
+            if (code === rows[0].code) {
+                hash(password)
+                    .then((hashedPw) => {
+                        db.updatePw(email, hashedPw)
+                            .then(() => {
+                                res.json({ success: true });
+                            })
+                            .catch((err) => {
+                                console.log("Error in db.updatePw: ", err);
+                            });
+                    })
+                    .catch((err) => {
+                        console.log("Error in hashPw: ", err);
+                    });
+            } else {
+                res.json({ codeerror: true });
+            }
+        })
+        .catch((err) => {
+            console.log("Error in db.checkCode: ", err);
         });
 });
 

@@ -48,9 +48,15 @@ export default class Login extends React.Component {
                 <input name="password" type="password" placeholder="Password" />
                 <button onClick={(e) => this.login(e)}>Log In</button>
                 <HashRouter>
-                    <div id="register">
-                        If you do not have an account yet,{" "}
-                        <Link to="/">register here!</Link>
+                    <div id="loglinks">
+                        <div>
+                            If you do not have an account yet,{" "}
+                            <Link to="/">register here!</Link>
+                        </div>
+                        <div>
+                            Have you forgotten your password?
+                            <Link to="/reset">Reset it here!</Link>
+                        </div>
                     </div>
                 </HashRouter>
             </div>
