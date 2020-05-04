@@ -4,6 +4,7 @@ const compression = require("compression");
 const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
+const csurf = require("csurf");
 
 app.use(compression());
 
@@ -14,6 +15,15 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14,
     })
 );
+
+// CSRF security
+
+app.use(csurf());
+
+app.use(function (req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 // parses the req.body
 
@@ -61,6 +71,34 @@ app.post("/register", (req, res) => {
         })
         .catch((err) => {
             console.log("Error in POST /register in index.js: ", err);
+        });
+});
+
+// POST /login
+
+app.post("/login", (req, res) => {
+    let databasePw, id;
+    let { email, password } = req.body;
+    db.login(email)
+        .then(({ rows }) => {
+            databasePw = rows[0].password;
+            id = rows[0].id;
+            return databasePw;
+        })
+        .then((databasePw) => {
+            return compare(password, databasePw);
+        })
+        .then((matchValue) => {
+            if (matchValue) {
+                req.session.userId = id;
+                res.json({ success: true });
+            } else {
+                res.json({ success: false });
+            }
+        })
+        .catch((err) => {
+            console.log("Error in db.login: ", err);
+            res.json({ success: false });
         });
 });
 

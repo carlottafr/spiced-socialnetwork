@@ -1,5 +1,6 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
+import { HashRouter, Link } from "react-router-dom";
 
 export default class Registration extends React.Component {
     constructor() {
@@ -52,6 +53,12 @@ export default class Registration extends React.Component {
                 <input name="email" type="email" placeholder="Email" />
                 <input name="password" type="password" placeholder="Password" />
                 <button onClick={(e) => this.register(e)}>Register</button>
+                <HashRouter>
+                    <div id="login">
+                        You already have an account?{" "}
+                        <Link to="/login">You can log in here!</Link>
+                    </div>
+                </HashRouter>
             </div>
         );
     }

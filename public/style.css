@@ -3,5 +3,14 @@ body {
 }
 
 .reg {
-    background: blue;
+    background: grey;
+}
+
+.welcome .logo img {
+    width: 20%;
+    height: auto;
+}
+
+.logo img {
+    width: 50%;
 }
