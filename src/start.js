@@ -4,13 +4,15 @@ import ReactDOM from "react-dom";
 // ^ only in start.js
 import Welcome from "./welcome";
 // no curly brackets because I export default it in the original file
-import Logo from "./logo";
+// import Logo from "./logo";
+import App from "./app";
 
 let elem;
 const userIsLoggedIn = location.pathname != "/welcome";
 
 if (userIsLoggedIn) {
-    elem = <Logo />;
+    // elem = <Logo />;
+    elem = <App />;
 } else {
     elem = <Welcome />;
 }
