@@ -7,6 +7,7 @@ const { hash, compare } = require("./bc");
 const csurf = require("csurf");
 const cryptoRandomString = require("crypto-random-string");
 const ses = require("./ses");
+const config = require("./config");
 
 app.use(compression());
 
@@ -26,14 +27,39 @@ app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
     next();
 });
+// Serve /public files
+
+app.use(express.static("./public"));
 
 // parses the req.body
 
 app.use(express.json());
 
-// Serve /public files
+// Image upload boilerplate start v
+// will upload sent files to my
+// hard drive in a folder called /uploads
 
-app.use(express.static("./public"));
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+const path = require("path");
+
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -169,11 +195,49 @@ app.post("/login", (req, res) => {
         });
 });
 
+// GET /user
+
+app.get("/user", (req, res) => {
+    return db
+        .getUser(req.session.userId)
+        .then(({ rows }) => {
+            let user = {
+                first: rows[0].first,
+                last: rows[0].last,
+                imageUrl: rows[0].image_url,
+            };
+            res.json(user);
+        })
+        .catch((err) => {
+            console.log("Error in db.getUser: ", err);
+        });
+});
+
 // POST /avatar-upload
 
-app.post("/avatar-upload", (req, res) => {
-    console.log("This is the req.body: ", req.body);
-    res.sendStatus(200);
+app.post("/avatar-upload", uploader.single("file"), ses.upload, (req, res) => {
+    // console.log("This is the req.body: ", req.file);
+    // res.sendStatus(200);
+    let awsUrl = config.s3Url;
+    awsUrl += req.file.filename;
+
+    if (req.file) {
+        return db
+            .addAvatar(req.session.userId, awsUrl)
+            .then(({ rows }) => {
+                let image = {
+                    imageUrl: rows[0].image_url,
+                };
+                console.log("Image object: ", image);
+                res.json(image);
+            })
+            .catch((err) => {
+                console.log("Error in db.addAvatar: ", err);
+                res.json({ success: false });
+            });
+    } else {
+        res.json({ noPic: true });
+    }
 });
 
 // GET /

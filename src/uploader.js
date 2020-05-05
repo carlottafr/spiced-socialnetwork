@@ -20,15 +20,17 @@ export default class Uploader extends React.Component {
         console.log("This is the current file: ", this.file);
     }
 
-    uploadPicture(e) {
+    uploadPicture() {
         // this.props.receivePicture("whoohoo");
-        e.preventDefault();
+        // e.preventDefault();
         var formData = new FormData();
         formData.append("file", this.state.file);
         axios
             .post("/avatar-upload", formData)
-            .then((res) => {
-                console.log("Response: ", res);
+            .then(({ data }) => {
+                console.log("This is the wanted object: ", data.imageUrl);
+                this.props.receivePicture(data.imageUrl);
+                this.props.toggleModal();
             })
             .catch((err) => {
                 console.log("Error in axios.post /avatar-upload: ", err);
@@ -50,7 +52,7 @@ export default class Uploader extends React.Component {
                     type="file"
                     accept="jpg/*"
                 />
-                <button onClick={(e) => this.uploadPicture(e)}>Upload</button>
+                <button onClick={() => this.uploadPicture()}>Upload</button>
             </div>
         );
     }

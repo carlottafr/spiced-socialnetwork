@@ -1,13 +1,12 @@
 import React from "react";
 import Presentational from "./presentational";
 import Uploader from "./uploader";
+import axios from "./axios";
 
 export default class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            first: "Noam",
-            last: "Chomsky",
             uploaderVisible: false,
         };
     }
@@ -16,6 +15,18 @@ export default class App extends React.Component {
         console.log("App mounted!");
         // axios GET to '/user' for user info
         // full name and profile pic
+        axios
+            .get("/user")
+            .then(({ data }) => {
+                this.setState({
+                    first: data.first,
+                    last: data.last,
+                    imageUrl: data.imageUrl,
+                });
+            })
+            .catch((err) => {
+                console.log("Error in axios.get /user: ", err);
+            });
     }
 
     toggleModal() {
@@ -26,6 +37,9 @@ export default class App extends React.Component {
     }
     receivePicture(arg) {
         console.log("I'm running in App: ", arg);
+        this.setState({
+            imageUrl: arg,
+        });
     }
 
     render() {
@@ -38,12 +52,12 @@ export default class App extends React.Component {
                 <Presentational
                     first={this.state.first}
                     last={this.state.last}
-                    imgUrl={this.state.imageUrl}
+                    imageUrl={this.state.imageUrl}
                     toggleModal={() => this.toggleModal()}
                 />
                 {this.state.uploaderVisible && (
                     <Uploader
-                        receivePicture={this.receivePicture}
+                        receivePicture={(arg) => this.receivePicture(arg)}
                         toggleModal={() => this.toggleModal()}
                     />
                 )}
