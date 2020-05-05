@@ -169,6 +169,13 @@ app.post("/login", (req, res) => {
         });
 });
 
+// POST /avatar-upload
+
+app.post("/avatar-upload", (req, res) => {
+    console.log("This is the req.body: ", req.body);
+    res.sendStatus(200);
+});
+
 // GET /
 
 app.get("*", (req, res) => {

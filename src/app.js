@@ -32,19 +32,19 @@ export default class App extends React.Component {
         return (
             <div>
                 <h1>This is the App Component</h1>
-                <h2 onClick={(e) => this.toggleModal(e)}>
+                <h2 onClick={() => this.toggleModal()}>
                     Changing State with a method!
                 </h2>
                 <Presentational
                     first={this.state.first}
                     last={this.state.last}
                     imgUrl={this.state.imageUrl}
-                    toggleModal={this.toggleModal}
+                    toggleModal={() => this.toggleModal()}
                 />
                 {this.state.uploaderVisible && (
                     <Uploader
                         receivePicture={this.receivePicture}
-                        toggleModal={this.toggleModal}
+                        toggleModal={() => this.toggleModal()}
                     />
                 )}
             </div>

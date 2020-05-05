@@ -14,7 +14,7 @@ export default function Presentational({ first, last, imageUrl, toggleModal }) {
                     className="avatar"
                     src={imageUrl}
                     alt={name}
-                    onClick={() => toggleModal()}
+                    onClick={toggleModal}
                 />
             </div>
             <h2>I am the Presentational Component</h2>
