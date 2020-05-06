@@ -1,5 +1,13 @@
 body {
-    background: hotpink;
+    background: rgb(255, 238, 169);
+    background: linear-gradient(
+        180deg,
+        rgba(255, 238, 169, 1) 0%,
+        rgba(255, 247, 216, 1) 50%,
+        rgba(255, 252, 241, 1) 100%
+    );
+    background-repeat: no-repeat;
+    height: 100vh;
 }
 
 .avatar-wrapper {
@@ -11,19 +19,35 @@ body {
     background: linen;
 }
 
-.reg {
-    background: grey;
-}
-
-.logo img {
-    width: 20%;
-    height: auto;
-}
-
 .avatar {
     width: 100px;
     height: 100px;
     margin: 5px;
     object-fit: contain;
     overflow: hidden;
+}
+
+.logo img {
+    width: 10%;
+    height: auto;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.uploader {
+    width: 40%;
+    height: 100%;
+    background: sandybrown;
+    margin: 0 auto;
+}
+
+#x {
+    cursor: pointer;
 }

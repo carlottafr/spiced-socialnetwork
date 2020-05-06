@@ -6,7 +6,7 @@ const db = require("./db");
 const { hash, compare } = require("./bc");
 const csurf = require("csurf");
 const cryptoRandomString = require("crypto-random-string");
-const ses = require("./ses");
+const s3 = require("./s3");
 const config = require("./config");
 
 app.use(compression());
@@ -86,7 +86,6 @@ app.get("/welcome", (req, res) => {
 // POST /register
 
 app.post("/register", (req, res) => {
-    console.log("This is the req.body: ", req.body);
     let { first, last, email, password } = req.body;
     hash(password)
         .then((hashedPw) => {
@@ -94,7 +93,6 @@ app.post("/register", (req, res) => {
         })
         .then(({ rows }) => {
             req.session.userId = rows[0].id;
-            console.log("This is the session object: ", req.session);
             res.json({ success: true });
         })
         .catch((err) => {
@@ -118,7 +116,7 @@ app.post("/password/reset/start", (req, res) => {
                     let text =
                         "This is the secret code for your password reset, use it within 10 minutes: " +
                         secretCode;
-                    ses.sendEmail(to, subject, text)
+                    s3.sendEmail(to, subject, text)
                         .then(() => {
                             res.json({ success: true });
                         })
@@ -205,6 +203,7 @@ app.get("/user", (req, res) => {
                 first: rows[0].first,
                 last: rows[0].last,
                 imageUrl: rows[0].image_url,
+                bio: rows[0].bio,
             };
             res.json(user);
         })
@@ -215,7 +214,7 @@ app.get("/user", (req, res) => {
 
 // POST /avatar-upload
 
-app.post("/avatar-upload", uploader.single("file"), ses.upload, (req, res) => {
+app.post("/avatar-upload", uploader.single("file"), s3.upload, (req, res) => {
     // console.log("This is the req.body: ", req.file);
     // res.sendStatus(200);
     let awsUrl = config.s3Url;
@@ -228,7 +227,6 @@ app.post("/avatar-upload", uploader.single("file"), ses.upload, (req, res) => {
                 let image = {
                     imageUrl: rows[0].image_url,
                 };
-                console.log("Image object: ", image);
                 res.json(image);
             })
             .catch((err) => {
@@ -238,6 +236,31 @@ app.post("/avatar-upload", uploader.single("file"), ses.upload, (req, res) => {
     } else {
         res.json({ noPic: true });
     }
+});
+
+app.post("/save-bio", (req, res) => {
+    let bio = req.body.draftBio;
+    return db
+        .updateBio(req.session.userId, bio)
+        .then(({ rows }) => {
+            let bio = {
+                bio: rows[0].bio,
+            };
+            console.log("This is the bio: ", bio);
+            res.json(bio);
+        })
+        .catch((err) => {
+            console.log("Error in db.updateBio: ", err);
+            res.json({ success: false });
+        });
+});
+
+// GET /logout
+
+app.get("/logout", (req, res) => {
+    req.session = null;
+    console.log("Req.session has been set to null.");
+    res.redirect("/");
 });
 
 // GET /

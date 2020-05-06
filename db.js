@@ -46,3 +46,10 @@ module.exports.addAvatar = (id, image_url) => {
         [id, image_url]
     );
 };
+
+module.exports.updateBio = (id, bio) => {
+    return db.query(`UPDATE users SET bio = $2 WHERE id = $1 RETURNING bio;`, [
+        id,
+        bio,
+    ]);
+};

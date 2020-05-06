@@ -1,19 +1,25 @@
 import React from "react";
-import Logo from "./logo";
 import ProfilePic from "./profilepic";
+import BioEditor from "./bioeditor";
 
-export default function Presentational({ first, last, imageUrl, toggleModal }) {
-    // console.log("Props in Presentational: ", props);
-
+export default function Profile({
+    first,
+    last,
+    imageUrl,
+    toggleModal,
+    bio,
+    saveBio,
+}) {
     return (
-        <div className="head">
-            <Logo />
+        <div>
             <ProfilePic
                 first={first}
                 last={last}
                 imageUrl={imageUrl}
                 toggleModal={toggleModal}
             />
+            {first} {last}
+            <BioEditor bio={bio} saveBio={saveBio} />
         </div>
     );
 }

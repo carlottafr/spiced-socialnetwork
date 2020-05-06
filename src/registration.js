@@ -45,7 +45,7 @@ export default class Registration extends React.Component {
 
     render() {
         return (
-            <div className="reg" onChange={(e) => this.handleChange(e)}>
+            <div onChange={(e) => this.handleChange(e)}>
                 <h3>I am the registration component</h3>
                 {this.state.error && <div>Oops, something went wrong!</div>}
                 <input name="first" type="text" placeholder="First name" />

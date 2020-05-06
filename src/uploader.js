@@ -44,15 +44,19 @@ export default class Uploader extends React.Component {
 
     render() {
         return (
-            <div>
-                <p onClick={() => this.closeModal()}>X</p>
-                <input
-                    onChange={(e) => this.handleChange(e)}
-                    name="file"
-                    type="file"
-                    accept="jpg/*"
-                />
-                <button onClick={() => this.uploadPicture()}>Upload</button>
+            <div className="modal">
+                <div className="uploader">
+                    <p id="x" onClick={() => this.closeModal()}>
+                        X
+                    </p>
+                    <input
+                        onChange={(e) => this.handleChange(e)}
+                        name="file"
+                        type="file"
+                        accept="jpg/*"
+                    />
+                    <button onClick={() => this.uploadPicture()}>Upload</button>
+                </div>
             </div>
         );
     }
