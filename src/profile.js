@@ -11,7 +11,7 @@ export default function Profile({
     saveBio,
 }) {
     return (
-        <div>
+        <div className="profile">
             <ProfilePic
                 first={first}
                 last={last}

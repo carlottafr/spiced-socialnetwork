@@ -246,7 +246,6 @@ app.post("/save-bio", (req, res) => {
             let bio = {
                 bio: rows[0].bio,
             };
-            console.log("This is the bio: ", bio);
             res.json(bio);
         })
         .catch((err) => {
@@ -261,6 +260,33 @@ app.get("/logout", (req, res) => {
     req.session = null;
     console.log("Req.session has been set to null.");
     res.redirect("/");
+});
+
+// GET /api/user/:id
+
+app.get("/api/user/:id", (req, res) => {
+    console.log("Server is receiving stuff: ", req.body);
+    let id = req.body.otherUserId;
+    console.log("This is the id: ", id);
+    if (id == req.session.userId) {
+        res.json({ sameUser: true });
+    } else {
+        return db
+            .getUser(id)
+            .then(({ rows }) => {
+                let user = {
+                    first: rows[0].first,
+                    last: rows[0].last,
+                    imageUrl: rows[0].image_url,
+                    bio: rows[0].bio,
+                };
+                console.log("This is the user: ", user);
+                res.json(user);
+            })
+            .then((err) => {
+                console.log("Error in OtherUserProfile db.getUser: ", err);
+            });
+    }
 });
 
 // GET /

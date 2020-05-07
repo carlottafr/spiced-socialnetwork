@@ -11,8 +11,6 @@ body {
 }
 
 .avatar-wrapper {
-    width: 110px;
-    height: 110px;
     border: 1px solid gray;
     padding: 5px;
     border-radius: 0.3em;
@@ -20,8 +18,6 @@ body {
 }
 
 .avatar {
-    width: 100px;
-    height: 100px;
     margin: 5px;
     object-fit: contain;
     overflow: hidden;
@@ -50,4 +46,21 @@ body {
 
 #x {
     cursor: pointer;
+}
+
+@media screen and (min-device-width: 375px) and (max-device-width: 576px) {
+}
+
+@media screen and (min-device-width: 1024px) and (max-device-width: 16000px) {
+    .avatar-wrapper {
+        width: 110px;
+        height: 110px;
+        padding: 5px;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        margin: 5px;
+    }
 }

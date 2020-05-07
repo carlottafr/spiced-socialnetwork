@@ -3,7 +3,7 @@ import React from "react";
 export default function Logo() {
     return (
         <div className="logo">
-            <img src="./roci.png" />
+            <img src="/roci.png" />
         </div>
     );
 }

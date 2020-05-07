@@ -2,7 +2,7 @@ import React from "react";
 
 export default function ProfilePic({ first, last, imageUrl, toggleModal }) {
     let name = first + " " + last;
-    imageUrl = imageUrl || "default.png";
+    imageUrl = imageUrl || "/default.png";
     return (
         <div className="avatar-wrapper">
             <img
