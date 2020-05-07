@@ -23,6 +23,7 @@ export default class App extends React.Component {
             .get("/user")
             .then(({ data }) => {
                 this.setState({
+                    id: data.id,
                     first: data.first,
                     last: data.last,
                     imageUrl: data.imageUrl,
@@ -54,48 +55,58 @@ export default class App extends React.Component {
     }
 
     render() {
-        return (
-            <div>
-                <BrowserRouter>
-                    <div>
-                        <Presentational
-                            first={this.state.first}
-                            last={this.state.last}
-                            imageUrl={this.state.imageUrl}
-                            toggleModal={() => this.toggleModal()}
-                        />
-
-                        <Route
-                            exact
-                            path="/"
-                            render={() => (
-                                <Profile
-                                    first={this.state.first}
-                                    last={this.state.last}
-                                    imageUrl={this.state.imageUrl}
-                                    toggleModal={() => this.toggleModal()}
-                                    bio={this.state.bio}
-                                    saveBio={(arg) => this.saveBio(arg)}
-                                />
-                            )}
-                        />
-                        <Route
-                            exact
-                            path="/user/:id"
-                            component={OtherProfile}
-                        />
-                        {this.state.uploaderVisible && (
-                            <Uploader
-                                receivePicture={(arg) =>
-                                    this.receivePicture(arg)
-                                }
+        if (!this.state.id) {
+            return null;
+        } else {
+            return (
+                <div>
+                    <BrowserRouter>
+                        <div>
+                            <Presentational
+                                first={this.state.first}
+                                last={this.state.last}
+                                imageUrl={this.state.imageUrl}
                                 toggleModal={() => this.toggleModal()}
                             />
-                        )}
-                        <Logout />
-                    </div>
-                </BrowserRouter>
-            </div>
-        );
+
+                            <Route
+                                exact
+                                path="/"
+                                render={() => (
+                                    <Profile
+                                        first={this.state.first}
+                                        last={this.state.last}
+                                        imageUrl={this.state.imageUrl}
+                                        toggleModal={() => this.toggleModal()}
+                                        bio={this.state.bio}
+                                        saveBio={(arg) => this.saveBio(arg)}
+                                    />
+                                )}
+                            />
+                            <Route
+                                exact
+                                path="/user/:id"
+                                render={(props) => (
+                                    <OtherProfile
+                                        key={props.match.url}
+                                        match={props.match}
+                                        history={props.history}
+                                    />
+                                )}
+                            />
+                            {this.state.uploaderVisible && (
+                                <Uploader
+                                    receivePicture={(arg) =>
+                                        this.receivePicture(arg)
+                                    }
+                                    toggleModal={() => this.toggleModal()}
+                                />
+                            )}
+                            <Logout />
+                        </div>
+                    </BrowserRouter>
+                </div>
+            );
+        }
     }
 }

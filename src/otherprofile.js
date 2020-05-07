@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import axios from "./axios";
+import ProfilePic from "./profilepic";
 
 class OtherProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            sameUser: false,
+        };
     }
 
     componentDidMount() {
@@ -15,8 +18,18 @@ class OtherProfile extends Component {
         // => homepage
         // handle the case when a user tries to view a profile that
         // doesn't exist yet => error / homepage
-        axios.get("api/user/" + otherUserId).then((response) => {
-            console.log("This is the data: ", response);
+        axios.get("/api/user/" + otherUserId).then(({ data }) => {
+            // console.log("This is the data: ", response);
+            if (data.sameUser || data.noMatch) {
+                this.props.history.push("/");
+            } else {
+                this.setState({
+                    first: data.first,
+                    last: data.last,
+                    imageUrl: data.imageUrl,
+                    bio: data.bio,
+                });
+            }
         });
     }
 
@@ -24,6 +37,15 @@ class OtherProfile extends Component {
         return (
             <>
                 <h1>I am other Profile!</h1>
+                <ProfilePic
+                    first={this.state.first}
+                    last={this.state.last}
+                    imageUrl={this.state.imageUrl}
+                />
+                <h3>
+                    {this.state.first} {this.state.last}
+                </h3>
+                <p>{this.state.bio}</p>
             </>
         );
     }

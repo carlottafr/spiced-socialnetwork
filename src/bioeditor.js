@@ -35,22 +35,22 @@ export default class BioEditor extends React.Component {
         return (
             <div className="bio-edit">
                 {!this.props.bio && (
-                    <div
+                    <p
                         id="addbio"
                         onClick={() => this.setState({ editMode: true })}
                     >
                         Add your biography (max. 500 characters)
-                    </div>
+                    </p>
                 )}
                 {this.props.bio && (
                     <div className="showbio">
-                        <div id="bio">{this.props.bio}</div>
-                        <div
-                            id="addbio"
+                        <div className="bio">{this.props.bio}</div>
+                        <p
+                            id="editbio"
                             onClick={() => this.setState({ editMode: true })}
                         >
                             Edit
-                        </div>
+                        </p>
                     </div>
                 )}
                 {this.state.editMode && (

@@ -200,6 +200,7 @@ app.get("/user", (req, res) => {
         .getUser(req.session.userId)
         .then(({ rows }) => {
             let user = {
+                id: rows[0].id,
                 first: rows[0].first,
                 last: rows[0].last,
                 imageUrl: rows[0].image_url,
@@ -215,8 +216,6 @@ app.get("/user", (req, res) => {
 // POST /avatar-upload
 
 app.post("/avatar-upload", uploader.single("file"), s3.upload, (req, res) => {
-    // console.log("This is the req.body: ", req.file);
-    // res.sendStatus(200);
     let awsUrl = config.s3Url;
     awsUrl += req.file.filename;
 
@@ -258,16 +257,13 @@ app.post("/save-bio", (req, res) => {
 
 app.get("/logout", (req, res) => {
     req.session = null;
-    console.log("Req.session has been set to null.");
     res.redirect("/");
 });
 
 // GET /api/user/:id
 
 app.get("/api/user/:id", (req, res) => {
-    console.log("Server is receiving stuff!");
     let id = req.params.id;
-    console.log("This is the id: ", id);
     if (id == req.session.userId) {
         res.json({ sameUser: true });
     } else {
@@ -280,11 +276,11 @@ app.get("/api/user/:id", (req, res) => {
                     imageUrl: rows[0].image_url,
                     bio: rows[0].bio,
                 };
-                console.log("This is the user: ", user);
                 res.json(user);
             })
-            .then((err) => {
+            .catch((err) => {
                 console.log("Error in OtherUserProfile db.getUser: ", err);
+                res.json({ noMatch: true });
             });
     }
 });
