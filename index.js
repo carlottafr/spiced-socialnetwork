@@ -265,8 +265,8 @@ app.get("/logout", (req, res) => {
 // GET /api/user/:id
 
 app.get("/api/user/:id", (req, res) => {
-    console.log("Server is receiving stuff: ", req.body);
-    let id = req.body.otherUserId;
+    console.log("Server is receiving stuff!");
+    let id = req.params.id;
     console.log("This is the id: ", id);
     if (id == req.session.userId) {
         res.json({ sameUser: true });
