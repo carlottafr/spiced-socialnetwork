@@ -61,7 +61,13 @@ export default class BioEditor extends React.Component {
                         />
                         <button id="savebio" onClick={(e) => this.setBio(e)}>
                             Save
-                        </button>{" "}
+                        </button>
+                        <button
+                            id="cancel"
+                            onClick={() => this.setState({ editMode: false })}
+                        >
+                            Cancel
+                        </button>
                     </div>
                 )}
             </div>

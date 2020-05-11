@@ -12,6 +12,7 @@ export default function Profile({
 }) {
     return (
         <div className="profile">
+            <h1>My Profile</h1>
             <ProfilePic
                 first={first}
                 last={last}

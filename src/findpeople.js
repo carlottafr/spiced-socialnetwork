@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export default function FindPeople() {
     const [user, setUser] = useState("");
     const [users, setUsers] = useState([]);
+    const [latest, setLatest] = useState(true);
 
     useEffect(() => {
         let abort;
@@ -22,11 +23,17 @@ export default function FindPeople() {
 
     return (
         <div className="find-users">
-            <h3>Find People</h3>
+            <h2>Find People</h2>
             <input
-                onChange={(e) => setUser(e.target.value)}
+                onChange={(e) => {
+                    setLatest(false);
+                    setUser(e.target.value);
+                }}
                 placeholder="Jane Doe"
             />
+            {latest && (
+                <h3>These are the latest members of this fine society:</h3>
+            )}
             <div className="users">
                 {users.map((user) => (
                     <div key={user.id}>
@@ -42,7 +49,7 @@ export default function FindPeople() {
                         </Link>
                     </div>
                 ))}
-                {!users.length && <div>No results found</div>}
+                {!users.length && <div id="no-results">No results found</div>}
             </div>
         </div>
     );

@@ -5,7 +5,7 @@ import Presentational from "./presentational";
 import FindPeople from "./findpeople";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import Logout from "./logout";
+import Footer from "./footer";
 import OtherProfile from "./otherprofile";
 
 export default class App extends React.Component {
@@ -110,6 +110,7 @@ export default class App extends React.Component {
                             )}
                         </div>
                     </BrowserRouter>
+                    <Footer />
                 </div>
             );
         }

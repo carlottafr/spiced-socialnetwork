@@ -8,6 +8,7 @@ export default function ProfilePic({ first, last, imageUrl, toggleModal }) {
                 className="avatar"
                 src={imageUrl}
                 alt={`${first} ${last}`}
+                title="Change your profile picture"
                 onClick={toggleModal}
             />
         </div>
