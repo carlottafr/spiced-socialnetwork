@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
+import { Link } from "react-router-dom";
 
 export default function FindPeople() {
     const [user, setUser] = useState("");
@@ -10,7 +11,6 @@ export default function FindPeople() {
         let abort;
         (async () => {
             const { data } = await axios.get("/api/users/" + (user || "user"));
-            console.log("The data: ", data);
             if (!abort) {
                 setUsers(data);
             }
@@ -30,16 +30,19 @@ export default function FindPeople() {
             <div className="users">
                 {users.map((user) => (
                     <div key={user.id}>
-                        <ProfilePic
-                            first={user.first}
-                            last={user.last}
-                            imageUrl={user.image_url}
-                        />
-                        <div>
-                            {user.first} {user.last}
-                        </div>
+                        <Link to={"/user/" + user.id}>
+                            <ProfilePic
+                                first={user.first}
+                                last={user.last}
+                                imageUrl={user.image_url}
+                            />
+                            <div>
+                                {user.first} {user.last}
+                            </div>
+                        </Link>
                     </div>
                 ))}
+                {!users.length && <div>No results found</div>}
             </div>
         </div>
     );

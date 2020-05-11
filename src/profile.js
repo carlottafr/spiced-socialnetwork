@@ -18,7 +18,11 @@ export default function Profile({
                 imageUrl={imageUrl}
                 toggleModal={toggleModal}
             />
-            {first} {last}
+            <div className="username">
+                <h2>
+                    {first} {last}
+                </h2>
+            </div>
             <BioEditor bio={bio} saveBio={saveBio} />
         </div>
     );

@@ -1,16 +1,19 @@
 import React from "react";
+import Logout from "./logout";
+import { Link } from "react-router-dom";
 
 export default function Nav() {
     return (
         <div className="nav">
-            {location.pathname != "/" && (
-                <div onClick={() => location.replace("/")}>My Profile</div>
-            )}
-            {location.pathname != "/users" && (
-                <div onClick={() => location.replace("/users")}>
-                    Find People
-                </div>
-            )}
+            <div>
+                <Logout />
+            </div>
+            <div>
+                <Link to="/users">Find People</Link>
+            </div>
+            <div>
+                <Link to="/">My Profile</Link>
+            </div>
         </div>
     );
 }

@@ -108,7 +108,6 @@ export default class App extends React.Component {
                                     toggleModal={() => this.toggleModal()}
                                 />
                             )}
-                            <Logout />
                         </div>
                     </BrowserRouter>
                 </div>
