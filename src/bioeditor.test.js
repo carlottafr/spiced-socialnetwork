@@ -1,9 +1,9 @@
 import React from "react";
 import BioEditor from "./bioeditor";
 import { render, waitForElement, fireEvent } from "@testing-library/react";
-import axios from "./axios";
+import axios from "axios";
 
-jest.mock("./axios");
+jest.mock("axios");
 
 test("When no bio is passed to it, an 'Add' button is rendered.", () => {
     const { container } = render(<BioEditor bio="" />);
@@ -31,12 +31,22 @@ test("Clicking the 'Save' button causes an ajax request.", async () => {
     fireEvent.click(container.querySelector("p"));
     let testBio = "Both my brothers' names are Daryl.";
     fireEvent.click(container.querySelector("button"));
-    axios.post.mockResolvedValue({
+    axios.get.mockResolvedValue({
         data: {
             bio: testBio,
         },
     });
+
+    const elem = await waitForElement(() =>
+        container.querySelectorAll("div.showbio")
+    );
     // const { newContainer } = render(<BioEditor testBio />);
-    await waitForElement(() => container.getElementsByClassName("showbio"));
-    expect(container.getElementsByClassName("bio")[0].innerHTML).toBe(testBio);
+    // await waitForElement(() => container.getElementsByClassName("showbio"));
+    expect(elem.innerHTML).toBe(
+        <div className="showbio">
+            <div className="bio">{testBio}</div>
+            <p id="editbio">Edit</p>
+        </div>
+    );
+    // expect(container.getElementsByClassName("bio")[0].innerHTML).toBe(testBio);
 });

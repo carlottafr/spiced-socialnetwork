@@ -285,6 +285,28 @@ app.get("/api/user/:id", (req, res) => {
     }
 });
 
+// GET /api/users/:user
+
+app.get("/api/users/:user", async (req, res) => {
+    const user = req.params.user;
+    console.log("Server - this is user: ", user);
+    if (!user) {
+        const { rows } = await db.getLastUsers();
+        console.log("Rows: ", rows);
+        res.json(rows);
+    } else {
+        const { rows } = await db.findUsersFirst(user);
+        if (!rows) {
+            const { rows } = await db.findUsersLast(user);
+            if (!rows) {
+                res.json({ noUser: true });
+            }
+            res.json(rows);
+        }
+        res.json(rows);
+    }
+});
+
 // GET /
 
 app.get("*", (req, res) => {

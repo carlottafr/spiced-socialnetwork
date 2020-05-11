@@ -53,3 +53,15 @@ module.exports.updateBio = (id, bio) => {
         bio,
     ]);
 };
+
+module.exports.getLastUsers = () => {
+    return db.query(`SELECT * FROM users ORDER BY id DESC LIMIT 3;`);
+};
+
+module.exports.findUsersFirst = (first) => {
+    return db.query(`SELECT * FROM users WHERE first ILIKE $1;`, [first + "%"]);
+};
+
+module.exports.findUsersLast = (last) => {
+    return db.query(`SELECT * FROM users WHERE last ILIKE $1;`[last + "%"]);
+};

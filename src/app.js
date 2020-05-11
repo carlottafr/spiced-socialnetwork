@@ -2,6 +2,7 @@ import React from "react";
 import axios from "./axios";
 import { BrowserRouter, Route } from "react-router-dom";
 import Presentational from "./presentational";
+import FindPeople from "./findpeople";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import Logout from "./logout";
@@ -93,6 +94,11 @@ export default class App extends React.Component {
                                         history={props.history}
                                     />
                                 )}
+                            />
+                            <Route
+                                exact
+                                path="/users"
+                                render={() => <FindPeople />}
                             />
                             {this.state.uploaderVisible && (
                                 <Uploader
