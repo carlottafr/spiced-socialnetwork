@@ -9,7 +9,7 @@ export default function FindPeople() {
     useEffect(() => {
         let abort;
         (async () => {
-            const { data } = await axios.get(`/api/users/${user}`);
+            const { data } = await axios.get("/api/users/" + (user || "user"));
             console.log("The data: ", data);
             if (!abort) {
                 setUsers(data);

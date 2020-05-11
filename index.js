@@ -290,20 +290,27 @@ app.get("/api/user/:id", (req, res) => {
 app.get("/api/users/:user", async (req, res) => {
     const user = req.params.user;
     console.log("Server - this is user: ", user);
-    if (!user) {
+    if (user == "user") {
         const { rows } = await db.getLastUsers();
         console.log("Rows: ", rows);
         res.json(rows);
     } else {
-        const { rows } = await db.findUsersFirst(user);
-        if (!rows) {
-            const { rows } = await db.findUsersLast(user);
-            if (!rows) {
-                res.json({ noUser: true });
+        try {
+            const { rows } = await db.findUsersFirst(user);
+            console.log("Rows in 299:", rows);
+            if (rows.length == 0) {
+                console.log("This is line 301 in index.js!");
+                const response = await db.findUsersLast(user);
+                console.og("Response: ", response);
+                if (!rows) {
+                    res.json({ noUser: true });
+                }
+                res.json(rows);
             }
             res.json(rows);
+        } catch (err) {
+            console.log("Error in findUsersFirst: ", err);
         }
-        res.json(rows);
     }
 });
 
