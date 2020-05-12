@@ -1,13 +1,12 @@
+/* https://coolors.co/156064-00c49a-f8e16c-ffc2b4-fb8f67 */
+
+* {
+    margin: 0;
+}
+
 body {
     background: rgb(255, 238, 169);
-    background: linear-gradient(
-        180deg,
-        rgba(255, 238, 169, 1) 0%,
-        rgba(255, 247, 216, 1) 50%,
-        rgba(255, 252, 241, 1) 100%
-    );
-    background-repeat: no-repeat;
-    height: 100vh;
+    background: #ffc2b4;
     font-family: "Jost", sans-serif;
 }
 
@@ -27,6 +26,7 @@ body {
 
 .head {
     display: grid;
+    background: #f8e16c;
 }
 
 .modal {
@@ -38,9 +38,23 @@ body {
     background: rgba(0, 0, 0, 0.4);
 }
 
+.nav div {
+    background-color: #156064;
+}
+
+.declinebtn,
+.fsbtn,
 .nav div a,
 .users div a {
     text-decoration: none;
+    text-transform: uppercase;
+}
+
+.nav div a {
+    color: #f8e16c;
+}
+
+.users div a {
     color: black;
 }
 
@@ -69,6 +83,20 @@ body {
 }
 
 @media screen and (min-device-width: 1024px) and (max-device-width: 16000px) {
+    .bio-edit,
+    .fsbuttons,
+    .showbio,
+    .username {
+        grid-column: 2 / 3;
+    }
+
+    .bio-edit,
+    .fsbuttons,
+    .otherprofile .showbio,
+    .username {
+        margin-left: 20px;
+    }
+
     .enterbio textarea {
         width: 380px;
         height: 80px;
@@ -80,6 +108,25 @@ body {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .fsbtn {
+        background: #00c49a;
+    }
+
+    .fsbuttons {
+        margin-top: 50px;
+    }
+
+    .fsbuttons button {
+        color: white;
+        padding: 10px;
+        border-radius: 0.3em;
+        border: none;
+    }
+
+    .declinebtn {
+        background: #fb8f67;
     }
 
     .head .avatar-wrapper {
@@ -98,8 +145,8 @@ body {
     .head {
         grid-template-columns: 110px 1fr 100px;
         align-items: baseline;
-        padding-bottom: 10px;
-        border-bottom: 1px solid orange;
+        padding: 0 10px 10px;
+        border-bottom: 1px solid #fb8f67;
     }
 
     .logo img {
@@ -114,13 +161,13 @@ body {
     }
 
     .nav div {
-        background-color: wheat;
         float: right;
-        margin-left: 2%;
+        margin-left: 0.3%;
         padding: 10px;
-        border: 1px solid orange;
+        border-radius: 0.3em;
     }
 
+    .otherprofile .avatar-wrapper,
     .profile .avatar-wrapper,
     .users .avatar-wrapper {
         width: 210px;
@@ -128,22 +175,27 @@ body {
         padding: 5px;
     }
 
+    .otherprofile .avatar-wrapper,
     .profile .avatar-wrapper {
         grid-column: 1 / 2;
         grid-row: 2 / 3;
     }
 
+    .otherprofile,
     .profile {
-        margin-top: 20px;
+        margin: 20px;
         display: grid;
         grid-template-columns: 210px 400px;
         grid-template-rows: 70px 50px 160px;
     }
 
+    .otherprofile h1,
     .profile h1 {
         grid-row: 1;
+        grid-column: 1 / 3;
     }
 
+    .otherprofile .avatar,
     .profile .avatar,
     .users .avatar {
         width: 200px;
@@ -153,12 +205,7 @@ body {
         overflow: hidden;
     }
 
-    .bio-edit,
-    .username {
-        margin-left: 20px;
-        grid-column: 2 / 3;
-    }
-
+    .otherprofile .fsbuttons,
     .profile .bio-edit {
         grid-row: 3;
     }
@@ -166,6 +213,10 @@ body {
     .profile .username {
         grid-column: 2 / 3;
         grid-row: 2;
+    }
+
+    .showbio {
+        font-size: 18px;
     }
 
     .users {

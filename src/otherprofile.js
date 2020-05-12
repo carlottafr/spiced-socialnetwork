@@ -35,21 +35,18 @@ class OtherProfile extends Component {
 
     render() {
         return (
-            <>
-                {/* <h1>
+            <div className="otherprofile">
+                <h1>
                     {this.state.first} {this.state.last}
-                </h1> */}
+                </h1>
                 <ProfilePic
                     first={this.state.first}
                     last={this.state.last}
                     imageUrl={this.state.imageUrl}
                 />
-                <h3>
-                    {this.state.first} {this.state.last}
-                </h3>
-                <p>{this.state.bio}</p>
+                <p className="showbio">{this.state.bio}</p>
                 <FriendshipButton otherId={this.props.match.params.id} />
-            </>
+            </div>
         );
     }
 }

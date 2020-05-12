@@ -294,7 +294,7 @@ app.get("/api/users/:user", async (req, res) => {
         res.json(rows);
     } else {
         try {
-            const { rows } = await db.findUsersFirst(user);
+            const { rows } = await db.findUsers(user);
             res.json(rows);
         } catch (err) {
             console.log("Error in findUsersFirst: ", err);
@@ -306,13 +306,10 @@ app.get("/api/users/:user", async (req, res) => {
 
 app.get("/api/friendstatus/:id", async (req, res) => {
     const { id } = req.params;
-    // console.log("This is the id: ", id);
     const { rows } = await db.friendStatus(id, req.session.userId);
-    // console.log("This is rows: ", rows);
     if (!rows.length) {
         res.json({ text: "Send Friend Request" });
     } else if (rows[0].accepted === false && rows[0].sender_id == id) {
-        console.log("I'm on line 315!");
         res.json({
             text: "Accept Friend Request",
             declineButton: true,
@@ -328,13 +325,11 @@ app.get("/api/friendstatus/:id", async (req, res) => {
 
 app.post("/api/friendship/:id", (req, res) => {
     const { id } = req.params;
-    const { text, decline } = req.body;
-    // console.log("This is the text: ", text);
+    const { text } = req.body;
     if (text == "Send Friend Request") {
         return db
             .addFriendsRow(id, req.session.userId)
-            .then(({ rows }) => {
-                // console.log("db.addFriendsRow was succesful: ", rows);
+            .then(() => {
                 res.json({ text: "Cancel Friend Request" });
             })
             .catch((err) => {
@@ -342,13 +337,12 @@ app.post("/api/friendship/:id", (req, res) => {
             });
     } else if (
         text == "Cancel Friend Request" ||
-        decline == "Decline Friend Request" ||
-        text == "End Friendship"
+        text == "End Friendship" ||
+        text == "Decline Friend Request"
     ) {
         return db
             .cancelFriend(id, req.session.userId)
             .then(() => {
-                // console.log("db.cancelFriend was successful!");
                 res.json({ text: "Send Friend Request" });
             })
             .catch((err) => {
@@ -358,7 +352,6 @@ app.post("/api/friendship/:id", (req, res) => {
         return db
             .acceptFriend(id, req.session.userId)
             .then(() => {
-                // console.log("db.acceptFriend was successful!");
                 res.json({ text: "End Friendship" });
             })
             .catch((err) => {

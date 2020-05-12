@@ -31,7 +31,6 @@ export default function FriendshipButton({ otherId }) {
         axios
             .post(`/api/friendship/${otherId}`, {
                 text: buttonText,
-                decline: decline,
             })
             .then(({ data }) => {
                 console.log("This is the data: ", data);
@@ -42,13 +41,26 @@ export default function FriendshipButton({ otherId }) {
                 console.log("Error in axios.post /friendship: ", err);
             });
     }
+
+    function declineFriendship() {
+        axios
+            .post(`/api/friendship/${otherId}`, { text: decline })
+            .then(({ data }) => {
+                console.log("Data after decline: ", data);
+                setButtonText(data.text);
+                setDeclineButton(false);
+            })
+            .catch((err) => {
+                console.log("Error in declineFriendship: ", err);
+            });
+    }
     return (
-        <div>
+        <div className="fsbuttons">
             <button className="fsbtn" onClick={submit}>
                 {buttonText}
             </button>
             {declineButton && (
-                <button className="cancelfsbtn" onClick={submit}>
+                <button className="declinebtn" onClick={declineFriendship}>
                     {decline}
                 </button>
             )}
