@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "./axios";
 import { HashRouter, Link } from "react-router-dom";
+import { useStatefulFields, useAuthSubmit } from "./hooks";
 
 export default class Login extends React.Component {
     constructor() {
@@ -9,7 +10,7 @@ export default class Login extends React.Component {
             error: false,
         };
     }
-
+    // const [fields, handleChange] = useStatefulFields();
     handleChange(e) {
         console.log("e.target.value: ", e.target.value);
         console.log("e.target.name: ", e.target.name);
@@ -18,6 +19,7 @@ export default class Login extends React.Component {
         });
     }
 
+    // const [error, submit] = useAuthSubmit("/login", fields);
     login(e) {
         e.preventDefault();
         console.log("About to login: ", this.state);

@@ -58,10 +58,44 @@ module.exports.getLastUsers = () => {
     return db.query(`SELECT * FROM users ORDER BY id DESC LIMIT 3;`);
 };
 
-module.exports.findUsersFirst = (first) => {
+module.exports.findUsers = (first) => {
     return db.query(`SELECT * FROM users WHERE first ILIKE $1;`, [first + "%"]);
 };
 
 module.exports.findUsersLast = (last) => {
     return db.query(`SELECT * FROM users WHERE last ILIKE $1;`[last + "%"]);
+};
+
+module.exports.friendStatus = (receiver_id, sender_id) => {
+    return db.query(
+        `SELECT * FROM friendships 
+WHERE (receiver_id = $1 AND sender_id = $2)
+OR (receiver_id = $2 AND sender_id = $1);`,
+        [receiver_id, sender_id]
+    );
+};
+
+module.exports.addFriendsRow = (receiver_id, sender_id) => {
+    return db.query(
+        `INSERT INTO friendships (receiver_id, sender_id) VALUES ($1, $2) RETURNING *;`,
+        [receiver_id, sender_id]
+    );
+};
+
+module.exports.acceptFriend = (receiver_id, sender_id) => {
+    return db.query(
+        `UPDATE friendships SET accepted = TRUE 
+        WHERE (receiver_id = $1 AND sender_id = $2) 
+        OR (receiver_id = $2 AND sender_id = $1);`,
+        [receiver_id, sender_id]
+    );
+};
+
+module.exports.cancelFriend = (receiver_id, sender_id) => {
+    return db.query(
+        `DELETE FROM friendships WHERE 
+        (receiver_id = $1 AND sender_id = $2) 
+        OR (receiver_id = $2 AND sender_id = $1);`,
+        [receiver_id, sender_id]
+    );
 };

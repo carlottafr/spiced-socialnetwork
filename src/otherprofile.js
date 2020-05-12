@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
+import FriendshipButton from "./friendbutton";
 
 class OtherProfile extends Component {
     constructor(props) {
@@ -11,7 +12,6 @@ class OtherProfile extends Component {
     }
 
     componentDidMount() {
-        console.log("this.props: ", this.props);
         const otherUserId = this.props.match.params.id;
         // make a request to the server
         // handle the case when a user tries to view their own profile
@@ -36,7 +36,9 @@ class OtherProfile extends Component {
     render() {
         return (
             <>
-                <h1>I am other Profile!</h1>
+                {/* <h1>
+                    {this.state.first} {this.state.last}
+                </h1> */}
                 <ProfilePic
                     first={this.state.first}
                     last={this.state.last}
@@ -46,6 +48,7 @@ class OtherProfile extends Component {
                     {this.state.first} {this.state.last}
                 </h3>
                 <p>{this.state.bio}</p>
+                <FriendshipButton otherId={this.props.match.params.id} />
             </>
         );
     }
