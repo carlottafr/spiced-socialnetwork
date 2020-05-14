@@ -8,5 +8,32 @@ export default function reducer(state = {}, action) {
             friendsWannabes: action.friendsWannabes,
         };
     }
+
+    if (action.type == "ACCEPT_FRIEND_REQUEST") {
+        state = {
+            ...state,
+            friendsWannabes: state.friendsWannabes.map((wannabe) => {
+                if (wannabe.id == action.id) {
+                    return {
+                        ...wannabe,
+                        accepted: true,
+                    };
+                } else {
+                    return wannabe;
+                }
+            }),
+        };
+        console.log("state: ", state);
+    }
+
+    if (action.type == "UNFRIEND") {
+        state = {
+            ...state,
+            friendsWannabes: state.friendsWannabes.filter((friend) => {
+                friend.id != action.id;
+            }),
+        };
+        console.log("state: ", state);
+    }
     return state;
 }

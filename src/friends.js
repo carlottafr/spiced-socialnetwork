@@ -7,6 +7,10 @@ import ProfilePic from "./profilepic";
 export default function Friends() {
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(getFriendsWannabes());
+    }, []);
+
     const wannabes = useSelector(
         (state) =>
             state.friendsWannabes &&
@@ -18,46 +22,62 @@ export default function Friends() {
             state.friendsWannabes &&
             state.friendsWannabes.filter((user) => user.accepted == true)
     );
-
-    useEffect(() => {
-        dispatch(getFriendsWannabes());
-    }, []);
+    console.log("Friends: ", friends);
+    console.log("Wannabes: ", wannabes);
 
     return (
         <div className="friendswannabes">
-            <div className="wannabes">
-                <h2>The following users want to be your friends</h2>
-                {wannabes.map((wannabe) => (
-                    <div key={wannabe.id}>
-                        {/* <Link to={"/user/" + wannabe.id}> */}
-                        <ProfilePic
-                            first={wannabe.first}
-                            last={wannabe.last}
-                            imageUrl={wannabe.image_url}
-                        />
-                        <div>
-                            {wannabe.first} {wannabe.last}
+            <h2>The following users want to be your friends</h2>
+            <div className="users">
+                {wannabes &&
+                    wannabes.map((wannabe) => (
+                        <div key={wannabe.id}>
+                            <Link to={"/user/" + wannabe.id}>
+                                <ProfilePic
+                                    first={wannabe.first}
+                                    last={wannabe.last}
+                                    imageUrl={wannabe.image_url}
+                                />
+                                <div>
+                                    {wannabe.first} {wannabe.last}
+                                </div>
+                            </Link>
+                            <button
+                                className="yesbtn"
+                                onClick={() =>
+                                    dispatch(acceptFriendship(wannabe.id))
+                                }
+                            >
+                                Accept Friend Request
+                            </button>
                         </div>
-                        {/* </Link> */}
-                    </div>
-                ))}
+                    ))}
             </div>
-            <div className="friends">
-                <h2>The following users are your friends</h2>
-                {friends.map((friend) => (
-                    <div key={friend.id}>
-                        {/* <Link to={"/user/" + friend.id}> */}
-                        <ProfilePic
-                            first={friend.first}
-                            last={friend.last}
-                            imageUrl={friend.image_url}
-                        />
-                        <div>
-                            {friend.first} {friend.last}
+            <h2>The following users are your friends</h2>
+            <div className="users">
+                {friends &&
+                    friends.map((friend) => (
+                        <div key={friend.id}>
+                            <Link to={"/user/" + friend.id}>
+                                <ProfilePic
+                                    first={friend.first}
+                                    last={friend.last}
+                                    imageUrl={friend.image_url}
+                                />
+                                <div>
+                                    {friend.first} {friend.last}
+                                </div>
+                            </Link>
+                            <button
+                                className="yesbtn"
+                                onClick={() =>
+                                    dispatch(endFriendship(friend.id))
+                                }
+                            >
+                                End Friendship
+                            </button>
                         </div>
-                        {/* </Link> */}
-                    </div>
-                ))}
+                    ))}
             </div>
         </div>
     );
