@@ -26,12 +26,12 @@ export default function reducer(state = {}, action) {
         console.log("state: ", state);
     }
 
-    if (action.type == "UNFRIEND") {
+    if (action.type == "UNFRIEND" || action.type == "DECLINE_FRIEND_REQUEST") {
         state = {
             ...state,
-            friendsWannabes: state.friendsWannabes.filter((friend) => {
-                friend.id != action.id;
-            }),
+            friendsWannabes: state.friendsWannabes.filter(
+                (friend) => friend.id != action.id
+            ),
         };
         console.log("state: ", state);
     }

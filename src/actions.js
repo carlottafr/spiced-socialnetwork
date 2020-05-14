@@ -20,6 +20,16 @@ export async function acceptFriendship(id) {
     };
 }
 
+export async function declineFriendship(id) {
+    await axios.post(`/api/friendship/${id}`, {
+        text: "Decline Friend Request",
+    });
+    return {
+        type: "DECLINE_FRIEND_REQUEST",
+        id,
+    };
+}
+
 export async function endFriendship(id) {
     const { data } = await axios.post(`/api/friendship/${id}`, {
         text: "End Friendship",

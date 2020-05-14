@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriendsWannabes, acceptFriendship, endFriendship } from "./actions";
+import {
+    getFriendsWannabes,
+    acceptFriendship,
+    declineFriendship,
+    endFriendship,
+} from "./actions";
 import ProfilePic from "./profilepic";
 
 export default function Friends() {
@@ -49,6 +54,14 @@ export default function Friends() {
                                 }
                             >
                                 Accept Friend Request
+                            </button>
+                            <button
+                                className="declinebtn"
+                                onClick={() =>
+                                    dispatch(declineFriendship(wannabe.id))
+                                }
+                            >
+                                Decline Friend Request
                             </button>
                         </div>
                     ))}
