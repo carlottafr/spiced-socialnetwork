@@ -59,11 +59,14 @@ export default class BioEditor extends React.Component {
                             defaultValue={this.props.bio}
                             onChange={(e) => this.handleChange(e)}
                         />
-                        <button id="savebio" onClick={(e) => this.setBio(e)}>
+                        <button
+                            className="yesbtn"
+                            onClick={(e) => this.setBio(e)}
+                        >
                             Save
                         </button>
                         <button
-                            id="cancel"
+                            className="declinebtn"
                             onClick={() => this.setState({ editMode: false })}
                         >
                             Cancel

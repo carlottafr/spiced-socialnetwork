@@ -12,6 +12,9 @@ export default function Nav() {
                 <Link to="/users">Find People</Link>
             </div>
             <div>
+                <Link to="/friends">Friends</Link>
+            </div>
+            <div>
                 <Link to="/">My Profile</Link>
             </div>
         </div>

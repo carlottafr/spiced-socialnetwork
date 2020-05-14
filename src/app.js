@@ -3,9 +3,9 @@ import axios from "./axios";
 import { BrowserRouter, Route } from "react-router-dom";
 import Presentational from "./presentational";
 import FindPeople from "./findpeople";
+import Friends from "./friends";
 import Uploader from "./uploader";
 import Profile from "./profile";
-import Footer from "./footer";
 import OtherProfile from "./otherprofile";
 
 export default class App extends React.Component {
@@ -99,6 +99,11 @@ export default class App extends React.Component {
                                 exact
                                 path="/users"
                                 render={() => <FindPeople />}
+                            />
+                            <Route
+                                exact
+                                path="/friends"
+                                render={() => <Friends />}
                             />
                             {this.state.uploaderVisible && (
                                 <Uploader

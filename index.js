@@ -360,6 +360,18 @@ app.post("/api/friendship/:id", (req, res) => {
     }
 });
 
+// GET /friends-wannabes
+
+app.get("/friends-wannabes", async (req, res) => {
+    try {
+        const { rows } = await db.getFriendsWannabes(req.session.userId);
+        console.log(rows);
+        res.json(rows);
+    } catch (err) {
+        console.log("Error in db.getFriendsWannabes: ", err);
+    }
+});
+
 // GET /
 
 app.get("*", (req, res) => {

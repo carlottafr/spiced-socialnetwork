@@ -99,3 +99,15 @@ module.exports.cancelFriend = (receiver_id, sender_id) => {
         [receiver_id, sender_id]
     );
 };
+
+module.exports.getFriendsWannabes = (id) => {
+    return db.query(
+        `SELECT users.id, first, last, image_url, accepted 
+        FROM friendships 
+        JOIN users 
+        ON (accepted = false AND recipient_id = $1 AND requester_id = users.id) 
+        OR (accepted = true AND recipient_id = $1 AND requester_id = users.id) 
+        OR (accepted = true AND requester_id = $1 AND recipient_id = users.id)`,
+        [id]
+    );
+};
