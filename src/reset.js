@@ -90,10 +90,19 @@ export default class ResetPassword extends React.Component {
                         {this.state.mailerror && (
                             <div>This email is not registered yet!</div>
                         )}
-                        <input name="email" type="email" placeholder="Email" />
-                        <button onClick={(e) => this.enterEmail(e)}>
-                            Submit
-                        </button>
+                        <div className="data">
+                            <input
+                                name="email"
+                                type="email"
+                                placeholder="Email"
+                            />
+                            <button
+                                className="yesbtn"
+                                onClick={(e) => this.enterEmail(e)}
+                            >
+                                Submit
+                            </button>
+                        </div>
                     </div>
                 )}
                 {this.state.step == 2 && (
@@ -102,21 +111,26 @@ export default class ResetPassword extends React.Component {
                             Please enter the secret code sent to you via email
                             and your new password:
                         </p>
-                        <input name="code" type="text" placeholder="Code" />
-                        <input
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                        />
-                        {this.state.error && (
-                            <div>Oops, something went wrong!</div>
-                        )}
-                        {this.state.codeerror && (
-                            <div>You entered an invalid code!</div>
-                        )}
-                        <button onClick={(e) => this.enterCodePw(e)}>
-                            Submit
-                        </button>
+                        <div className="data">
+                            <input name="code" type="text" placeholder="Code" />
+                            <input
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                            />
+                            {this.state.error && (
+                                <div>Oops, something went wrong!</div>
+                            )}
+                            {this.state.codeerror && (
+                                <div>You entered an invalid code!</div>
+                            )}
+                            <button
+                                className="yesbtn"
+                                onClick={(e) => this.enterCodePw(e)}
+                            >
+                                Submit
+                            </button>
+                        </div>
                     </div>
                 )}
                 {this.state.step === 3 && (

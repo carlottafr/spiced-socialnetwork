@@ -97,6 +97,7 @@ app.post("/register", (req, res) => {
         })
         .catch((err) => {
             console.log("Error in POST /register in index.js: ", err);
+            res.json({ success: false });
         });
 });
 
@@ -365,7 +366,7 @@ app.post("/api/friendship/:id", (req, res) => {
 app.get("/friends-wannabes", async (req, res) => {
     try {
         const { rows } = await db.getFriendsWannabes(req.session.userId);
-        console.log(rows);
+        // console.log(rows);
         res.json(rows);
     } catch (err) {
         console.log("Error in db.getFriendsWannabes: ", err);

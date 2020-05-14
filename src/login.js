@@ -42,23 +42,23 @@ export default class Login extends React.Component {
 
     render() {
         return (
-            <div className="login" onChange={(e) => this.handleChange(e)}>
+            <div className="data" onChange={(e) => this.handleChange(e)}>
                 {this.state.error && (
                     <div>Oops, something went wrong - please try again!</div>
                 )}
                 <input name="email" type="email" placeholder="Email" />
                 <input name="password" type="password" placeholder="Password" />
-                <button onClick={(e) => this.login(e)}>Log In</button>
+                <button className="yesbtn" onClick={(e) => this.login(e)}>
+                    Log In
+                </button>
                 <HashRouter>
-                    <div id="loglinks">
-                        <div>
-                            If you do not have an account yet,{" "}
-                            <Link to="/">register here!</Link>
-                        </div>
-                        <div>
-                            Have you forgotten your password?
-                            <Link to="/reset">Reset it here!</Link>
-                        </div>
+                    <div>
+                        If you do not have an account yet,{" "}
+                        <Link to="/">register here!</Link>
+                    </div>
+                    <div>
+                        Have you forgotten your password?{" "}
+                        <Link to="/reset">Reset it here!</Link>
                     </div>
                 </HashRouter>
             </div>

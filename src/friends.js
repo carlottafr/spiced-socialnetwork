@@ -33,7 +33,10 @@ export default function Friends() {
     return (
         <div className="friendswannabes">
             <h2>The following users want to be your friends</h2>
-            <div className="users">
+            <div className="wannabes">
+                {wannabes && !wannabes.length && (
+                    <div>You have no pending friend requests!</div>
+                )}
                 {wannabes &&
                     wannabes.map((wannabe) => (
                         <div key={wannabe.id}>
@@ -67,7 +70,10 @@ export default function Friends() {
                     ))}
             </div>
             <h2>The following users are your friends</h2>
-            <div className="users">
+            <div className="friends">
+                {friends && !friends.length && (
+                    <div>You have no friends (yet)! :/</div>
+                )}
                 {friends &&
                     friends.map((friend) => (
                         <div key={friend.id}>
@@ -82,7 +88,7 @@ export default function Friends() {
                                 </div>
                             </Link>
                             <button
-                                className="yesbtn"
+                                className="declinebtn"
                                 onClick={() =>
                                     dispatch(endFriendship(friend.id))
                                 }

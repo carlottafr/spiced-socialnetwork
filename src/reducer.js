@@ -23,7 +23,6 @@ export default function reducer(state = {}, action) {
                 }
             }),
         };
-        console.log("state: ", state);
     }
 
     if (action.type == "UNFRIEND" || action.type == "DECLINE_FRIEND_REQUEST") {
@@ -33,7 +32,6 @@ export default function reducer(state = {}, action) {
                 (friend) => friend.id != action.id
             ),
         };
-        console.log("state: ", state);
     }
     return state;
 }

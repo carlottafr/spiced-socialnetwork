@@ -47,13 +47,23 @@ export default class Registration extends React.Component {
     render() {
         return (
             <div onChange={(e) => this.handleChange(e)}>
-                <h3>Get ready to join our quest!</h3>
                 {this.state.error && <div>Oops, something went wrong!</div>}
-                <input name="first" type="text" placeholder="First name" />
-                <input name="last" type="text" placeholder="Last name" />
-                <input name="email" type="email" placeholder="Email" />
-                <input name="password" type="password" placeholder="Password" />
-                <button onClick={(e) => this.register(e)}>Register</button>
+                <div className="data">
+                    <input name="first" type="text" placeholder="First name" />
+                    <input name="last" type="text" placeholder="Last name" />
+                    <input name="email" type="email" placeholder="Email" />
+                    <input
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                    />
+                    <button
+                        className="yesbtn"
+                        onClick={(e) => this.register(e)}
+                    >
+                        Register
+                    </button>
+                </div>
                 <HashRouter>
                     <div id="login">
                         You already have an account?{" "}

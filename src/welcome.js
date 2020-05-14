@@ -9,6 +9,8 @@ export default function Welcome() {
     return (
         <div className="welcome">
             <Logo />
+            <h1>Join our lovely society of plant magicians!</h1>
+            <p>Plants... it is all we ever really talk about.</p>
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

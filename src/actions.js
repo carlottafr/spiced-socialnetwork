@@ -10,10 +10,9 @@ export async function getFriendsWannabes() {
 }
 
 export async function acceptFriendship(id) {
-    const { data } = await axios.post(`/api/friendship/${id}`, {
+    await axios.post(`/api/friendship/${id}`, {
         text: "Accept Friend Request",
     });
-    console.log(data);
     return {
         type: "ACCEPT_FRIEND_REQUEST",
         id,
@@ -31,10 +30,9 @@ export async function declineFriendship(id) {
 }
 
 export async function endFriendship(id) {
-    const { data } = await axios.post(`/api/friendship/${id}`, {
+    await axios.post(`/api/friendship/${id}`, {
         text: "End Friendship",
     });
-    console.log(data);
     return {
         type: "UNFRIEND",
         id,
