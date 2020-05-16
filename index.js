@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
+const server = require("http").Server(app);
+// origins protects against attacks
+// 'localhost:8080 mysocialnetwork.herokuapp.com:*' for deployment
+// const io = require("socket.io")(server, { origins: "localhost:8080" });
+// io is an object
 const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bc");
@@ -291,12 +296,15 @@ app.get("/api/user/:id", (req, res) => {
 app.get("/api/users/:user", async (req, res) => {
     const user = req.params.user;
     if (user == "user") {
-        const { rows } = await db.getLastUsers();
+        const { rows } = await db.getLastUsers(req.session.userId);
         res.json(rows);
     } else {
         try {
             const { rows } = await db.findUsers(user);
-            res.json(rows);
+            const finalRows = rows.filter(
+                (row) => row.id !== req.session.userId
+            );
+            res.json(finalRows);
         } catch (err) {
             console.log("Error in findUsersFirst: ", err);
         }
@@ -382,7 +390,32 @@ app.get("*", (req, res) => {
         res.sendFile(__dirname + "/index.html");
     }
 });
-
-app.listen(8080, function () {
+// app is switched for server so that non-socket requests
+// are handled by app (Express server), and socket requests
+// are handled by the Node server
+server.listen(8080, function () {
     console.log("I'm listening.");
 });
+
+// io.on("connection", (socket) => {
+//     console.log(`A socket with the id ${socket.id} just connected.`);
+//     socket.emit("yo", {
+//         msg: "Nice to see you",
+//     });
+//     socket.on("hi", ({ msg }) => {
+//         console.log("msg: ", msg);
+//     });
+//     // send a msg to everyone who is connected
+//     // except the one who has just showed up
+//     socket.broadcast.emit("someoneShowedUp", {
+//         msg: "Welcome!",
+//     });
+//     // everyone who is connected sees this:
+//     io.emit("achtung", "This site is great");
+//     // target a specific socketId (var in which I store it)
+//     // to eg. tell them about a new friend request
+//     // io.sockets.sockets[socketId].emit('whatever');
+//     socket.on("disconnect", () => {
+//         console.log(`A socket with the id ${socket.id} just disconnected.`);
+//     });
+// });

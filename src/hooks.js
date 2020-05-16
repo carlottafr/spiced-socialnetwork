@@ -17,11 +17,11 @@ export function useAuthSubmit(path, fields) {
 export function useStatefulFields() {
     const [fields, setFields] = useState({});
     function handleChange({ target }) {
-        useStatefulFields({
-            ...useStatefulFields,
+        setFields({
+            ...fields,
             [target.name]: target.value,
         });
     }
-
+    console.log(fields);
     return [fields, handleChange];
 }

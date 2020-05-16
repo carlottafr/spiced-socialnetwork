@@ -54,8 +54,11 @@ module.exports.updateBio = (id, bio) => {
     ]);
 };
 
-module.exports.getLastUsers = () => {
-    return db.query(`SELECT * FROM users ORDER BY id DESC LIMIT 3;`);
+module.exports.getLastUsers = (id) => {
+    return db.query(
+        `SELECT * FROM users WHERE id != $1 ORDER BY id DESC LIMIT 3;`,
+        [id]
+    );
 };
 
 module.exports.findUsers = (first) => {

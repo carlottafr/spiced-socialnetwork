@@ -32,7 +32,7 @@ export default function Friends() {
 
     return (
         <div className="friendswannabes">
-            <h2>The following users want to be your friends</h2>
+            <h2>The following users want to trade plant secrets with you</h2>
             <div className="wannabes">
                 {wannabes && !wannabes.length && (
                     <div>You have no pending friend requests!</div>
