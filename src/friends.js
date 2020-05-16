@@ -27,8 +27,8 @@ export default function Friends() {
             state.friendsWannabes &&
             state.friendsWannabes.filter((user) => user.accepted == true)
     );
-    console.log("Friends: ", friends);
-    console.log("Wannabes: ", wannabes);
+    // console.log("Friends: ", friends);
+    // console.log("Wannabes: ", wannabes);
 
     return (
         <div className="friendswannabes">

@@ -107,9 +107,9 @@ export default class App extends React.Component {
                             />
                             {this.state.uploaderVisible && (
                                 <Uploader
-                                    receivePicture={(arg) =>
-                                        this.receivePicture(arg)
-                                    }
+                                    // receivePicture={(arg) =>
+                                    //     this.receivePicture(arg)
+                                    // }
                                     toggleModal={() => this.toggleModal()}
                                 />
                             )}
