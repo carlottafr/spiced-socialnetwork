@@ -120,7 +120,7 @@ module.exports.getLastMessages = () => {
         `SELECT chats.id AS chats_id, users.id, first, last, image_url, message, sender_id, chats.created_at 
         FROM users
         JOIN chats 
-        ON users.id = sender_id;`
+        ON users.id = sender_id ORDER BY chats_id DESC LIMIT 10;`
     );
 };
 

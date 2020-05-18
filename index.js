@@ -431,15 +431,14 @@ io.on("connection", (socket) => {
         return socket.disconnect(true);
     }
 
-    // db -> get 10 last messages (JOIN users + chats)
-
     db.getLastMessages().then(({ rows }) => {
-        console.log("Rows: ", rows);
-        io.sockets.emit("chatMessages", rows);
+        // console.log("Rows: ", rows);
+        let lastMsgs = rows.reverse(rows);
+        io.sockets.emit("chatMessages", lastMsgs);
     });
 
     socket.on("newMessage", (msg) => {
-        console.log("This msg comes from chat.js: ", msg);
+        // console.log("This msg comes from chat.js: ", msg);
         return db.addMessage(msg, userId).then(({ rows }) => {
             let newMsg = {
                 chats_id: rows[0].id,
@@ -459,24 +458,4 @@ io.on("connection", (socket) => {
             });
         });
     });
-
-    //     socket.emit("yo", {
-    //         msg: "Nice to see you",
-    //     });
-    //     socket.on("hi", ({ msg }) => {
-    //         console.log("msg: ", msg);
-    //     });
-    //     // send a msg to everyone who is connected
-    //     // except the one who has just showed up
-    //     socket.broadcast.emit("someoneShowedUp", {
-    //         msg: "Welcome!",
-    //     });
-    //     // everyone who is connected sees this:
-    //     io.emit("achtung", "This site is great");
-    //     // target a specific socketId (var in which I store it)
-    //     // to eg. tell them about a new friend request
-    //     // io.sockets.sockets[socketId].emit('whatever');
-    //     socket.on("disconnect", () => {
-    //         console.log(`A socket with the id ${socket.id} just disconnected.`);
-    //     });
 });

@@ -7,17 +7,16 @@ import ProfilePic from "./profilepic";
 export default function Chat() {
     const elemRef = useRef();
     const chatMessages = useSelector((state) => state && state.chatMessages);
-    console.log("Last 10 chatMessages: ", chatMessages);
+    // console.log("Last 10 chatMessages: ", chatMessages);
 
     useEffect(() => {
-        console.log("Chat hooks component has mounted!");
-        console.log("elemRef 1: ", elemRef);
+        // console.log("Chat hooks component has mounted!");
+        console.log("elemRef: ", elemRef);
         console.log("scrollTop: ", elemRef.current.scrollTop);
         console.log("clientHeight: ", elemRef.current.clientHeight);
         console.log("scrollHeight: ", elemRef.current.scrollHeight);
         elemRef.current.scrollTop =
             elemRef.current.scrollHeight - elemRef.current.clientHeight;
-        console.log("elemRef 2: ", elemRef);
     }, []);
 
     const keyCheck = (e) => {
@@ -25,7 +24,7 @@ export default function Chat() {
         if (e.key === "Enter") {
             // prevent jumping to the next line
             e.preventDefault();
-            console.log("Value: ", e.target.value);
+            // console.log("Value: ", e.target.value);
             socket.emit("newMessage", e.target.value);
             e.target.value = "";
         }
