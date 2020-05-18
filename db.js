@@ -114,3 +114,19 @@ module.exports.getFriendsWannabes = (id) => {
         [id]
     );
 };
+
+module.exports.getLastMessages = () => {
+    return db.query(
+        `SELECT chats.id AS chats_id, users.id, first, last, image_url, message, sender_id, chats.created_at 
+        FROM users
+        JOIN chats 
+        ON users.id = sender_id;`
+    );
+};
+
+module.exports.addMessage = (message, sender_id) => {
+    return db.query(
+        `INSERT INTO chats (message, sender_id) VALUES ($1, $2) RETURNING *;`,
+        [message, sender_id]
+    );
+};

@@ -12,10 +12,13 @@ export default function Nav() {
                 <Link to="/users">Find People</Link>
             </div>
             <div>
+                <Link to="/chat">Chat</Link>
+            </div>
+            <div>
                 <Link to="/friends">Friends</Link>
             </div>
             <div>
-                <Link to="/">My Profile</Link>
+                <Link to="/">Home</Link>
             </div>
         </div>
     );

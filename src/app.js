@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Presentational from "./presentational";
 import FindPeople from "./findpeople";
 import Friends from "./friends";
+import Chat from "./chat";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import OtherProfile from "./otherprofile";
@@ -100,6 +101,7 @@ export default class App extends React.Component {
                                 path="/users"
                                 render={() => <FindPeople />}
                             />
+                            <Route exact path="/chat" render={() => <Chat />} />
                             <Route
                                 exact
                                 path="/friends"

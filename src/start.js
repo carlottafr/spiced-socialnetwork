@@ -6,6 +6,8 @@ import Welcome from "./welcome";
 // no curly brackets because I export default it in the original file
 // import Logo from "./logo";
 import App from "./app";
+// giving socket.js file access to redux
+import { init } from "./socket";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import reduxPromise from "redux-promise";
@@ -28,6 +30,7 @@ const userIsLoggedIn = location.pathname != "/welcome";
 
 if (userIsLoggedIn) {
     // elem = <Logo />;
+    init(store);
     elem = (
         // any component in App has
         // access to global state

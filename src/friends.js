@@ -35,7 +35,7 @@ export default function Friends() {
             <h2>The following users want to trade plant secrets with you</h2>
             <div className="wannabes">
                 {wannabes && !wannabes.length && (
-                    <div>You have no pending friend requests!</div>
+                    <div>You have no friend requests.</div>
                 )}
                 {wannabes &&
                     wannabes.map((wannabe) => (

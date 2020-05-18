@@ -40,5 +40,21 @@ export default function reducer(state = {}, action) {
             ),
         };
     }
+
+    if (action.type == "GET_LAST_MESSAGES") {
+        state = {
+            ...state,
+            chatMessages: action.msgs,
+        };
+    }
+
+    if (action.type == "ADD_NEW_MESSAGE") {
+        state = {
+            ...state,
+            chatMessages: [...state.chatMessages, action.msg],
+        };
+        console.log(state);
+    }
+
     return state;
 }

@@ -48,3 +48,17 @@ export async function endFriendship(id) {
         id,
     };
 }
+
+export function chatMessages(msgs) {
+    return {
+        type: "GET_LAST_MESSAGES",
+        msgs,
+    };
+}
+
+export function chatMessage(msg) {
+    return {
+        type: "ADD_NEW_MESSAGE",
+        msg,
+    };
+}

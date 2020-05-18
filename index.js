@@ -1,10 +1,15 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
+// - socket needs a Node server instead of Express one
+// - we pass it our Express server so that all
+// non-socket-related requests are handled
+// by our Express server, but the socket one
+// is handled by the Node server:
 const server = require("http").Server(app);
 // origins protects against attacks
 // 'localhost:8080 mysocialnetwork.herokuapp.com:*' for deployment
-// const io = require("socket.io")(server, { origins: "localhost:8080" });
+const io = require("socket.io")(server, { origins: "localhost:8080" });
 // io is an object
 const cookieSession = require("cookie-session");
 const db = require("./db");
@@ -16,13 +21,30 @@ const config = require("./config");
 
 app.use(compression());
 
-app.use(
-    cookieSession({
-        secret: `I'm always hungry.`,
-        // v cookie becomes invalid after 2 weeks
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+// Cookie Session for Express and socket
+
+// app.use(
+//     cookieSession({
+//         secret: `I'm always hungry.`,
+//         // v cookie becomes invalid after 2 weeks
+//         maxAge: 1000 * 60 * 60 * 24 * 14,
+//     })
+// );
+
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always hungry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90,
+});
+
+app.use(cookieSessionMiddleware);
+
+// with the following code
+// socket.request.session will be available
+// when a user connects
+
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 // CSRF security
 
@@ -397,25 +419,64 @@ server.listen(8080, function () {
     console.log("I'm listening.");
 });
 
-// io.on("connection", (socket) => {
-//     console.log(`A socket with the id ${socket.id} just connected.`);
-//     socket.emit("yo", {
-//         msg: "Nice to see you",
-//     });
-//     socket.on("hi", ({ msg }) => {
-//         console.log("msg: ", msg);
-//     });
-//     // send a msg to everyone who is connected
-//     // except the one who has just showed up
-//     socket.broadcast.emit("someoneShowedUp", {
-//         msg: "Welcome!",
-//     });
-//     // everyone who is connected sees this:
-//     io.emit("achtung", "This site is great");
-//     // target a specific socketId (var in which I store it)
-//     // to eg. tell them about a new friend request
-//     // io.sockets.sockets[socketId].emit('whatever');
-//     socket.on("disconnect", () => {
-//         console.log(`A socket with the id ${socket.id} just disconnected.`);
-//     });
-// });
+// socket.io code
+
+io.on("connection", (socket) => {
+    console.log(`A socket with the id ${socket.id} just connected.`);
+    const userId = socket.request.session.userId;
+    // check if the user is logged in with
+    // cookie session object
+    // disconnect if not
+    if (!userId) {
+        return socket.disconnect(true);
+    }
+
+    // db -> get 10 last messages (JOIN users + chats)
+
+    db.getLastMessages().then(({ rows }) => {
+        console.log("Rows: ", rows);
+        io.sockets.emit("chatMessages", rows);
+    });
+
+    socket.on("newMessage", (msg) => {
+        console.log("This msg comes from chat.js: ", msg);
+        return db.addMessage(msg, userId).then(({ rows }) => {
+            let newMsg = {
+                chats_id: rows[0].id,
+                message: rows[0].message,
+                sender_id: rows[0].sender_id,
+                created_at: rows[0].created_at,
+            };
+            console.log("addMessage rows: ", rows);
+            return db.getUser(userId).then(({ rows }) => {
+                let wholeInfo = {
+                    ...newMsg,
+                    first: rows[0].first,
+                    last: rows[0].last,
+                    image_url: rows[0].image_url,
+                };
+                io.sockets.emit("chatMessage", wholeInfo);
+            });
+        });
+    });
+
+    //     socket.emit("yo", {
+    //         msg: "Nice to see you",
+    //     });
+    //     socket.on("hi", ({ msg }) => {
+    //         console.log("msg: ", msg);
+    //     });
+    //     // send a msg to everyone who is connected
+    //     // except the one who has just showed up
+    //     socket.broadcast.emit("someoneShowedUp", {
+    //         msg: "Welcome!",
+    //     });
+    //     // everyone who is connected sees this:
+    //     io.emit("achtung", "This site is great");
+    //     // target a specific socketId (var in which I store it)
+    //     // to eg. tell them about a new friend request
+    //     // io.sockets.sockets[socketId].emit('whatever');
+    //     socket.on("disconnect", () => {
+    //         console.log(`A socket with the id ${socket.id} just disconnected.`);
+    //     });
+});
