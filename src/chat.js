@@ -7,52 +7,51 @@ import ProfilePic from "./profilepic";
 export default function Chat() {
     const elemRef = useRef();
     const chatMessages = useSelector((state) => state && state.chatMessages);
-    // console.log("Last 10 chatMessages: ", chatMessages);
 
     useEffect(() => {
-        // console.log("Chat hooks component has mounted!");
-        console.log("elemRef: ", elemRef);
-        console.log("scrollTop: ", elemRef.current.scrollTop);
-        console.log("clientHeight: ", elemRef.current.clientHeight);
-        console.log("scrollHeight: ", elemRef.current.scrollHeight);
         elemRef.current.scrollTop =
             elemRef.current.scrollHeight - elemRef.current.clientHeight;
     }, [chatMessages]);
 
     const keyCheck = (e) => {
-        // console.log("Key pressed: ", e.key);
         if (e.key === "Enter") {
             // prevent jumping to the next line
             e.preventDefault();
-            // console.log("Value: ", e.target.value);
             socket.emit("newMessage", e.target.value);
             e.target.value = "";
         }
     };
     return (
         <div className="chat">
-            <h3>Welcome to Chat!</h3>
+            <img src="./chat_jungle.jpg" id="chatbg" />
+            <div className="chat-header">
+                <h2>Plantician Lounge</h2>
+            </div>
             <div className="chatmsg-container" ref={elemRef}>
                 {chatMessages &&
                     chatMessages.map((message) => (
                         <div key={message.chats_id} className="message-unit">
-                            <Link to={"/user/" + message.id}>
+                            <Link to={"/user/" + message.sender_id}>
                                 <ProfilePic
                                     first={message.first}
                                     last={message.last}
                                     imageUrl={message.image_url}
                                 />
-                                <div>
+                                <div id="name">
                                     {message.first} {message.last}
                                 </div>
                             </Link>
-                            <div id="date">{message.created_at}</div>
-                            <div className="messagetext">{message.message}</div>
+                            <div className="date-msg-container">
+                                <div className="date">{message.created_at}</div>
+                                <div className="message-text">
+                                    {message.message}
+                                </div>
+                            </div>
                         </div>
                     ))}
             </div>
             <textarea
-                placeholder="Add your message here"
+                placeholder="Add your message here and press enter"
                 onKeyDown={keyCheck}
             />
         </div>

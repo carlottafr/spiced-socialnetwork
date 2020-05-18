@@ -87,7 +87,7 @@ body {
 @media screen and (min-device-width: 375px) and (max-device-width: 576px) {
 }
 
-@media screen and (min-device-width: 1024px) and (max-device-width: 16000px) {
+@media screen and (min-device-width: 1024px) and (max-device-width: 1600px) {
     .bio-edit,
     .fsbuttons,
     .showbio,
@@ -102,11 +102,94 @@ body {
         margin-left: 20px;
     }
 
+    .chat,
+    .chat textarea,
+    .chat-header,
     .chatmsg-container {
-        border: 1px solid black;
-        height: 180px;
-        width: 50%;
+        border-radius: 0.3em;
+    }
+
+    .chat,
+    .chatcontainer {
+        height: 420px;
+        width: 700px;
+        margin: 0 auto;
+    }
+
+    .chat {
+        padding: 10px;
+        margin-top: 20px;
+        position: relative;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .chat #chatbg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1;
+        width: 100%;
+        height: auto;
+        opacity: 0.7;
+    }
+
+    .chat,
+    .date-msg-container,
+    .head {
+        box-shadow: 0px 3px 4px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-header {
+        text-align: center;
+        font-size: 16px;
+        margin-top: 5px;
+        position: relative;
+        z-index: 3;
+        width: 600px;
+        margin: 0 auto;
+    }
+
+    .chat textarea {
+        margin-top: 10px;
+        width: 580px;
+        margin-left: 50px;
+        padding: 10px;
+        resize: none;
         overflow-y: scroll;
+    }
+
+    .chat textarea,
+    .chatmsg-container {
+        border: 1px solid darkslategray;
+    }
+
+    .chat textarea,
+    .chat-header,
+    .chatmsg-container {
+        background: white;
+    }
+
+    .chatmsg-container,
+    .chat textarea {
+        display: block;
+        position: relative;
+        z-index: 2;
+    }
+
+    .chatmsg-container {
+        padding: 10px;
+        height: 280px;
+        width: 580px;
+        overflow-y: scroll;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+
+    .date-msg-container {
+        border-radius: 0.3em;
+        background: #70a9a1;
+        padding: 10px;
     }
 
     .enterbio textarea {
@@ -115,11 +198,8 @@ body {
     }
 
     .find-users {
-        /* width: 80%; */
-        /* margin: 0 auto; */
         display: flex;
         flex-direction: column;
-        /* align-items: center; */
     }
 
     .data input,
@@ -180,7 +260,6 @@ body {
         grid-template-columns: 140px 1fr 100px;
         align-items: baseline;
         padding: 0 10px 10px;
-        box-shadow: 3px 3px 4px 4px rgba(0, 0, 0, 0.1);
     }
 
     .head .logo img {
@@ -211,18 +290,59 @@ body {
         padding: 5px;
     }
 
+    .message-text {
+        text-align: justify;
+    }
+
+    .message-unit,
+    .message-unit a {
+        display: grid;
+        grid-template-columns: 80px 450px;
+        grid-template-rows: 20px 1fr;
+        align-items: baseline;
+        margin-bottom: 10px;
+        text-decoration: none;
+    }
+
+    .message-unit a div.avatar-wrapper {
+        grid-column: 1 / 2;
+        grid-row: 2;
+    }
+
+    .message-unit a div#name {
+        grid-row: 1;
+        font-size: 14px;
+        z-index: 2;
+        color: #000;
+    }
+
+    .message-unit .date-msg-container {
+        grid-row: 2;
+        z-index: 1;
+        margin-top: 5px;
+    }
+
+    .message-unit .date {
+        font-size: 10px;
+        text-align: right;
+    }
+
+    .message-unit .date-msg-container,
+    .message-unit a div#name {
+        grid-column: 2 / 3;
+    }
+
     .message-unit .avatar-wrapper {
-        width: 60px;
-        height: 60px;
-        padding: 5px;
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        margin-top: 5px;
     }
 
     .message-unit .avatar {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         margin: 5px;
-        object-fit: contain;
-        overflow: hidden;
     }
 
     .otherprofile .avatar-wrapper,

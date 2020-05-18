@@ -21,16 +21,6 @@ const config = require("./config");
 
 app.use(compression());
 
-// Cookie Session for Express and socket
-
-// app.use(
-//     cookieSession({
-//         secret: `I'm always hungry.`,
-//         // v cookie becomes invalid after 2 weeks
-//         maxAge: 1000 * 60 * 60 * 24 * 14,
-//     })
-// );
-
 const cookieSessionMiddleware = cookieSession({
     secret: `I'm always hungry.`,
     maxAge: 1000 * 60 * 60 * 24 * 90,
@@ -54,6 +44,7 @@ app.use(function (req, res, next) {
     res.cookie("mytoken", req.csrfToken());
     next();
 });
+
 // Serve /public files
 
 app.use(express.static("./public"));
@@ -98,6 +89,21 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
+
+// create a nicer look for dates and times
+
+const showTime = (posttime) => {
+    return (posttime = new Intl.DateTimeFormat("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+        timeZone: "Etc/GMT",
+    }).format(posttime));
+};
 
 // GET /welcome
 
@@ -422,7 +428,6 @@ server.listen(8080, function () {
 // socket.io code
 
 io.on("connection", (socket) => {
-    console.log(`A socket with the id ${socket.id} just connected.`);
     const userId = socket.request.session.userId;
     // check if the user is logged in with
     // cookie session object
@@ -432,21 +437,21 @@ io.on("connection", (socket) => {
     }
 
     db.getLastMessages().then(({ rows }) => {
-        // console.log("Rows: ", rows);
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].created_at = showTime(rows[i].created_at);
+        }
         let lastMsgs = rows.reverse(rows);
         io.sockets.emit("chatMessages", lastMsgs);
     });
 
     socket.on("newMessage", (msg) => {
-        // console.log("This msg comes from chat.js: ", msg);
         return db.addMessage(msg, userId).then(({ rows }) => {
             let newMsg = {
                 chats_id: rows[0].id,
                 message: rows[0].message,
                 sender_id: rows[0].sender_id,
-                created_at: rows[0].created_at,
+                created_at: showTime(rows[0].created_at),
             };
-            console.log("addMessage rows: ", rows);
             return db.getUser(userId).then(({ rows }) => {
                 let wholeInfo = {
                     ...newMsg,
