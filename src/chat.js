@@ -17,7 +17,7 @@ export default function Chat() {
         console.log("scrollHeight: ", elemRef.current.scrollHeight);
         elemRef.current.scrollTop =
             elemRef.current.scrollHeight - elemRef.current.clientHeight;
-    }, []);
+    }, [chatMessages]);
 
     const keyCheck = (e) => {
         // console.log("Key pressed: ", e.key);

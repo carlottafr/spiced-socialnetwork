@@ -1,14 +1,5 @@
 // import React from "react";
 import * as io from "socket.io-client";
-// establish connection
-// const socket = io.connect();
-
-// socket.on("yo", ({ msg }) => {
-//     console.log("msg: ", msg);
-//     socket.emit("hi", {
-//         msg: "Great to be here!",
-//     });
-// });
 
 import { chatMessages, chatMessage } from "./actions";
 
@@ -16,6 +7,7 @@ export let socket;
 
 export const init = (store) => {
     if (!socket) {
+        // establish connection
         socket = io.connect();
 
         socket.on("chatMessages", (msgs) => store.dispatch(chatMessages(msgs)));

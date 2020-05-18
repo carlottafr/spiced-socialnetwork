@@ -105,7 +105,7 @@ body {
     .chatmsg-container {
         border: 1px solid black;
         height: 180px;
-        width: 80%;
+        width: 50%;
         overflow-y: scroll;
     }
 

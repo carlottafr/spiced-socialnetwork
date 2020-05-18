@@ -53,7 +53,7 @@ export default function reducer(state = {}, action) {
             ...state,
             chatMessages: [...state.chatMessages, action.msg],
         };
-        console.log(state);
+        // console.log(state);
     }
 
     return state;
