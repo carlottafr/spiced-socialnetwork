@@ -5,7 +5,7 @@ import BioEditor from "./bioeditor";
 export default function Profile({
     first,
     last,
-    imageUrl,
+    avatar,
     toggleModal,
     bio,
     saveBio,
@@ -16,7 +16,7 @@ export default function Profile({
             <ProfilePic
                 first={first}
                 last={last}
-                imageUrl={imageUrl}
+                avatar={avatar}
                 toggleModal={toggleModal}
             />
             <div className="username">

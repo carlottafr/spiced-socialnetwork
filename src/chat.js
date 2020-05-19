@@ -35,7 +35,7 @@ export default function Chat() {
                                 <ProfilePic
                                     first={message.first}
                                     last={message.last}
-                                    imageUrl={message.image_url}
+                                    avatar={message.image}
                                 />
                                 <div id="name">
                                     {message.first} {message.last}

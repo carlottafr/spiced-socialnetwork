@@ -35,12 +35,14 @@ body {
     bottom: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.4);
+    z-index: 4;
 }
 
 .nav div {
     background-color: #1f363d;
 }
 
+.chat-header h2,
 .declinebtn,
 .yesbtn,
 .friends div a,
@@ -160,6 +162,7 @@ body {
     }
 
     .chat textarea,
+    .chat-header,
     .chatmsg-container {
         border: 1px solid darkslategray;
     }
@@ -418,6 +421,7 @@ body {
     .uploader {
         margin-top: 3%;
         padding: 20px;
+        z-index: 5;
     }
 
     .users {

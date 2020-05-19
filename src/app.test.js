@@ -14,7 +14,7 @@ test("App shows nothing at first", async () => {
             id: 1,
             first: "Noam",
             last: "Chomsky",
-            imageUrl: "/puppy.png",
+            image: "/puppy.png",
         },
     });
     const { container } = render(<App />);

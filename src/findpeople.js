@@ -41,7 +41,7 @@ export default function FindPeople() {
                             <ProfilePic
                                 first={user.first}
                                 last={user.last}
-                                imageUrl={user.image_url}
+                                avatar={user.image}
                             />
                             <div>
                                 {user.first} {user.last}

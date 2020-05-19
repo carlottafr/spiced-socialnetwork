@@ -3,7 +3,7 @@ import Logo from "./logo";
 import Nav from "./nav";
 import ProfilePic from "./profilepic";
 
-export default function Presentational({ first, last, imageUrl, toggleModal }) {
+export default function Presentational({ first, last, avatar, toggleModal }) {
     // console.log("Props in Presentational: ", props);
 
     return (
@@ -13,7 +13,7 @@ export default function Presentational({ first, last, imageUrl, toggleModal }) {
             <ProfilePic
                 first={first}
                 last={last}
-                imageUrl={imageUrl}
+                avatar={avatar}
                 toggleModal={toggleModal}
             />
         </div>

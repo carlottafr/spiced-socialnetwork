@@ -2,13 +2,6 @@
 // called the first time, a global state is created as an
 // empty object) and action
 export default function reducer(state = {}, action) {
-    if (action.type == "UPLOAD_AVATAR") {
-        state = {
-            ...state,
-            imageUrl: action.imageUrl,
-        };
-    }
-
     if (action.type == "RECEIVE_FRIENDS_WANNABES") {
         state = {
             ...state,

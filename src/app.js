@@ -28,7 +28,7 @@ export default class App extends React.Component {
                     id: data.id,
                     first: data.first,
                     last: data.last,
-                    imageUrl: data.imageUrl,
+                    image: data.image,
                     bio: data.bio,
                 });
             })
@@ -46,7 +46,7 @@ export default class App extends React.Component {
     receivePicture(arg) {
         console.log("I'm running in App: ", arg);
         this.setState({
-            imageUrl: arg,
+            image: arg,
         });
     }
 
@@ -67,7 +67,7 @@ export default class App extends React.Component {
                             <Presentational
                                 first={this.state.first}
                                 last={this.state.last}
-                                imageUrl={this.state.imageUrl}
+                                avatar={this.state.image}
                                 toggleModal={() => this.toggleModal()}
                             />
 
@@ -78,7 +78,7 @@ export default class App extends React.Component {
                                     <Profile
                                         first={this.state.first}
                                         last={this.state.last}
-                                        imageUrl={this.state.imageUrl}
+                                        avatar={this.state.image}
                                         toggleModal={() => this.toggleModal()}
                                         bio={this.state.bio}
                                         saveBio={(arg) => this.saveBio(arg)}
@@ -109,9 +109,9 @@ export default class App extends React.Component {
                             />
                             {this.state.uploaderVisible && (
                                 <Uploader
-                                    // receivePicture={(arg) =>
-                                    //     this.receivePicture(arg)
-                                    // }
+                                    receivePicture={(arg) =>
+                                        this.receivePicture(arg)
+                                    }
                                     toggleModal={() => this.toggleModal()}
                                 />
                             )}

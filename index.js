@@ -233,14 +233,26 @@ app.get("/user", (req, res) => {
     return db
         .getUser(req.session.userId)
         .then(({ rows }) => {
+            // console.log(rows);
             let user = {
                 id: rows[0].id,
                 first: rows[0].first,
                 last: rows[0].last,
-                imageUrl: rows[0].image_url,
                 bio: rows[0].bio,
             };
-            res.json(user);
+            return user;
+        })
+        .then((user) => {
+            return db
+                .getAvatar([req.session.userId])
+                .then(({ rows }) => {
+                    user.image = rows[0].image;
+                    // console.log("User: ", user);
+                    res.json(user);
+                })
+                .catch((err) => {
+                    console.log("Error in db.getAvatar: ", err);
+                });
         })
         .catch((err) => {
             console.log("Error in db.getUser: ", err);
@@ -255,15 +267,15 @@ app.post("/avatar-upload", uploader.single("file"), s3.upload, (req, res) => {
 
     if (req.file) {
         return db
-            .addAvatar(req.session.userId, awsUrl)
+            .addImage(awsUrl, "avatar", req.session.userId)
             .then(({ rows }) => {
                 let image = {
-                    imageUrl: rows[0].image_url,
+                    image: rows[0].image,
                 };
                 res.json(image);
             })
             .catch((err) => {
-                console.log("Error in db.addAvatar: ", err);
+                console.log("Error in db.addImage: ", err);
                 res.json({ success: false });
             });
     } else {
@@ -307,10 +319,20 @@ app.get("/api/user/:id", (req, res) => {
                 let user = {
                     first: rows[0].first,
                     last: rows[0].last,
-                    imageUrl: rows[0].image_url,
                     bio: rows[0].bio,
                 };
-                res.json(user);
+                return user;
+            })
+            .then((user) => {
+                return db
+                    .getAvatar([id])
+                    .then(({ rows }) => {
+                        user.image = rows[0].image;
+                        res.json(user);
+                    })
+                    .catch((err) => {
+                        console.log("Error in db.getAvatar: ", err);
+                    });
             })
             .catch((err) => {
                 console.log("Error in OtherUserProfile db.getUser: ", err);
@@ -325,6 +347,11 @@ app.get("/api/users/:user", async (req, res) => {
     const user = req.params.user;
     if (user == "user") {
         const { rows } = await db.getLastUsers(req.session.userId);
+        for (let i = 0; i < rows.length; i++) {
+            let data = await db.getAvatar([rows[i].id]);
+            rows[i].image = data.rows[0].image;
+        }
+        // console.log(rows);
         res.json(rows);
     } else {
         try {
@@ -332,6 +359,11 @@ app.get("/api/users/:user", async (req, res) => {
             const finalRows = rows.filter(
                 (row) => row.id !== req.session.userId
             );
+            for (let i = 0; i < finalRows.length; i++) {
+                let data = await db.getAvatar([finalRows[i].id]);
+                finalRows[i].image = data.rows[0].image;
+            }
+            // console.log(finalRows);
             res.json(finalRows);
         } catch (err) {
             console.log("Error in findUsersFirst: ", err);
@@ -436,13 +468,46 @@ io.on("connection", (socket) => {
         return socket.disconnect(true);
     }
 
-    db.getLastMessages().then(({ rows }) => {
+    // let onlineUsers = [
+    //     {
+    //         id: userId,
+    //         socketId: socket.id,
+    //     },
+    //     ...
+    //      or
+    //      {
+    //         id: userId,
+    //         socketId: [socketId1, socketId2, ...],
+    //      }
+    //  }
+    // ];
+    // function getUsersByIds(arrayOfIds) {
+    //     const query = `
+    //     SELECT id, first, last, image
+    //     FROM users WHERE id = ANY($1);`;
+    //     // ANY loops through the passed array
+    //     // and returns an array of objects
+    //     return db.query(query, [arrayOfIds]);
+    // }
+
+    // socket.on("disconnect", function () {
+    // do something when user disconnects
+    // from my app
+    // remove the id from onlineUsers
+    // });
+
+    let getLastMessages = async () => {
+        const { rows } = await db.getLastMessages();
         for (let i = 0; i < rows.length; i++) {
             rows[i].created_at = showTime(rows[i].created_at);
+            let data = await db.getAvatar([rows[i].id]);
+            rows[i].image = data.rows[0].image;
         }
         let lastMsgs = rows.reverse(rows);
         io.sockets.emit("chatMessages", lastMsgs);
-    });
+    };
+
+    getLastMessages();
 
     socket.on("newMessage", (msg) => {
         return db.addMessage(msg, userId).then(({ rows }) => {
@@ -452,15 +517,27 @@ io.on("connection", (socket) => {
                 sender_id: rows[0].sender_id,
                 created_at: showTime(rows[0].created_at),
             };
-            return db.getUser(userId).then(({ rows }) => {
-                let wholeInfo = {
-                    ...newMsg,
-                    first: rows[0].first,
-                    last: rows[0].last,
-                    image_url: rows[0].image_url,
-                };
-                io.sockets.emit("chatMessage", wholeInfo);
-            });
+            return db
+                .getUser(userId)
+                .then(({ rows }) => {
+                    let wholeInfo = {
+                        ...newMsg,
+                        first: rows[0].first,
+                        last: rows[0].last,
+                    };
+                    return wholeInfo;
+                })
+                .then((wholeInfo) => {
+                    return db
+                        .getAvatar([userId])
+                        .then(({ rows }) => {
+                            wholeInfo.image = rows[0].image;
+                            io.sockets.emit("chatMessage", wholeInfo);
+                        })
+                        .catch((err) => {
+                            console.log("Error in db.getAvatar: ", err);
+                        });
+                });
         });
     });
 });

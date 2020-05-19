@@ -26,7 +26,7 @@ class OtherProfile extends Component {
                 this.setState({
                     first: data.first,
                     last: data.last,
-                    imageUrl: data.imageUrl,
+                    avatar: data.image,
                     bio: data.bio,
                 });
             }
@@ -42,7 +42,7 @@ class OtherProfile extends Component {
                 <ProfilePic
                     first={this.state.first}
                     last={this.state.last}
-                    imageUrl={this.state.imageUrl}
+                    avatar={this.state.avatar}
                 />
                 <p className="showbio">{this.state.bio}</p>
                 <FriendshipButton otherId={this.props.match.params.id} />

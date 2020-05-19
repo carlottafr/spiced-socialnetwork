@@ -1,15 +1,5 @@
 import axios from "./axios";
 
-export async function uploadAvatar(file) {
-    var formData = new FormData();
-    formData.append("file", file);
-    const { data } = await axios.post("/avatar-upload", formData);
-    return {
-        type: "UPLOAD_AVATAR",
-        imageUrl: data.imageUrl,
-    };
-}
-
 export async function getFriendsWannabes() {
     const { data } = await axios.get("/friends-wannabes");
     // console.log(data);

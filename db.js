@@ -40,10 +40,19 @@ module.exports.updatePw = (email, password) => {
     ]);
 };
 
-module.exports.addAvatar = (id, image_url) => {
+module.exports.addImage = (image, descr, uploader_id) => {
     return db.query(
-        `UPDATE users SET image_url = $2 WHERE id = $1 RETURNING *;`,
-        [id, image_url]
+        `INSERT INTO images (image, descr, uploader_id) VALUES ($1, $2, $3) RETURNING *;`,
+        [image, descr, uploader_id]
+    );
+};
+
+module.exports.getAvatar = (id) => {
+    return db.query(
+        `SELECT image FROM images 
+        WHERE (uploader_id = ANY($1) AND descr = 'avatar') 
+        ORDER BY id DESC LIMIT 1;`,
+        [id]
     );
 };
 
@@ -65,15 +74,11 @@ module.exports.findUsers = (first) => {
     return db.query(`SELECT * FROM users WHERE first ILIKE $1;`, [first + "%"]);
 };
 
-module.exports.findUsersLast = (last) => {
-    return db.query(`SELECT * FROM users WHERE last ILIKE $1;`[last + "%"]);
-};
-
 module.exports.friendStatus = (receiver_id, sender_id) => {
     return db.query(
         `SELECT * FROM friendships 
-WHERE (receiver_id = $1 AND sender_id = $2)
-OR (receiver_id = $2 AND sender_id = $1);`,
+        WHERE (receiver_id = $1 AND sender_id = $2) 
+        OR (receiver_id = $2 AND sender_id = $1);`,
         [receiver_id, sender_id]
     );
 };
@@ -105,22 +110,23 @@ module.exports.cancelFriend = (receiver_id, sender_id) => {
 
 module.exports.getFriendsWannabes = (id) => {
     return db.query(
-        `SELECT users.id, first, last, image_url, accepted 
+        `SELECT users.id, first, last, accepted 
         FROM friendships 
-        JOIN users 
+        INNER JOIN users 
         ON (accepted = false AND receiver_id = $1 AND sender_id = users.id) 
         OR (accepted = true AND receiver_id = $1 AND sender_id = users.id) 
-        OR (accepted = true AND sender_id = $1 AND receiver_id = users.id)`,
+        OR (accepted = true AND sender_id = $1 AND receiver_id = users.id);`,
         [id]
     );
 };
 
 module.exports.getLastMessages = () => {
     return db.query(
-        `SELECT chats.id AS chats_id, first, last, image_url, message, sender_id, chats.created_at 
+        `SELECT users.id AS id, chats.id AS chats_id, first, last, message, sender_id, chats.created_at 
         FROM users
         JOIN chats 
-        ON users.id = sender_id ORDER BY chats_id DESC LIMIT 10;`
+        ON users.id = sender_id
+        ORDER BY chats_id DESC LIMIT 10;`
     );
 };
 

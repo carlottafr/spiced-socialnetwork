@@ -28,8 +28,8 @@ export default class Uploader extends React.Component {
         axios
             .post("/avatar-upload", formData)
             .then(({ data }) => {
-                console.log("This is the wanted object: ", data.imageUrl);
-                this.props.receivePicture(data.imageUrl);
+                console.log("This is the wanted object: ", data.image);
+                this.props.receivePicture(data.image);
                 this.props.toggleModal();
             })
             .catch((err) => {
