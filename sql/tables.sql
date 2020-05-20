@@ -28,7 +28,8 @@ CREATE TABLE posts(
     text TEXT,
     poster_id INT NOT NULL REFERENCES users(id),
     receiver_id INT NOT NULL REFERENCES users(id),
-    image_id INT REFERENCES images(id)
+    image_id INT REFERENCES images(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE friendships(

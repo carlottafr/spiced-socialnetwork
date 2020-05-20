@@ -26,7 +26,7 @@ export default function Profile({
                 </h2>
             </div>
             <BioEditor bio={bio} saveBio={saveBio} />
-            <Wall />
+            <Wall id="user" />
         </div>
     );
 }

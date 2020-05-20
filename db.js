@@ -139,12 +139,11 @@ module.exports.addMessage = (message, sender_id) => {
 
 module.exports.getWallPosts = (id) => {
     return db.query(
-        `SELECT poster_id, text, first, last, image 
+        `SELECT posts.id AS id, posts.created_at AS created_at, poster_id, text, first, last 
         FROM posts 
-        INNER JOIN users 
+        JOIN users 
         ON (receiver_id = $1 AND poster_id = users.id) 
-        INNER JOIN images 
-        ON (poster_id = uploader_id);`,
+        ORDER BY id DESC;`,
         [id]
     );
 };

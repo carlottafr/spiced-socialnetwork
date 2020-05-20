@@ -13,6 +13,7 @@ const io = require("socket.io")(server, { origins: "localhost:8080" });
 // io is an object
 const cookieSession = require("cookie-session");
 const db = require("./db");
+const { showTime } = require("./showtime");
 const { hash, compare } = require("./bc");
 const csurf = require("csurf");
 const cryptoRandomString = require("crypto-random-string");
@@ -89,21 +90,6 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile(`${__dirname}/bundle.js`));
 }
-
-// create a nicer look for dates and times
-
-const showTime = (posttime) => {
-    return (posttime = new Intl.DateTimeFormat("en-GB", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-        hour12: false,
-        timeZone: "Etc/GMT",
-    }).format(posttime));
-};
 
 // GET /welcome
 
@@ -451,6 +437,57 @@ app.get("/friends-wannabes", async (req, res) => {
     }
 });
 
+// GET /wall-posts/:id
+
+app.get("/api/wall-posts/:id", async (req, res) => {
+    const { id } = req.params;
+    let data;
+    if (id == "user") {
+        data = await db.getWallPosts(req.session.userId);
+    } else {
+        data = await db.getWallPosts(id);
+    }
+    let response;
+    for (let i = 0; i < data.rows.length; i++) {
+        data.rows[i].created_at = showTime(data.rows[i].created_at);
+        response = await db.getAvatar([data.rows[i].poster_id]);
+        data.rows[i].image = response.rows[0].image;
+    }
+    console.log("data.rows: ", data.rows);
+    res.json(data.rows);
+});
+
+// POST /add-post
+
+app.post("/add-post", async (req, res) => {
+    console.log("index.js line 463 calling in!");
+    const { text, id } = req.body;
+    let data;
+    if (id == "user") {
+        data = await db.addWallPost(
+            text,
+            req.session.userId,
+            req.session.userId
+        );
+    } else {
+        data = await db.addWallPost(text, req.session.userId, id);
+    }
+    const { rows } = await db.getUser(data.rows[0].poster_id);
+    let post = {
+        id: data.rows[0].id,
+        poster_id: rows[0].id,
+        first: rows[0].first,
+        last: rows[0].last,
+        text: data.rows[0].text,
+        created_at: showTime(data.rows[0].created_at),
+    };
+    const response = await db.getAvatar([post.poster_id]);
+    console.log("response: ", response);
+    console.log("post: ", post);
+    post.image = response.rows[0].image;
+    res.json(post);
+});
+
 // GET /
 
 app.get("*", (req, res) => {
@@ -518,6 +555,16 @@ io.on("connection", (socket) => {
     };
 
     getLastMessages();
+
+    // let getWallPosts = async (id) => {
+    //     const { rows } = await db.getWallPosts(id);
+    //     for (let i = 0; i < rows.length; i++) {
+    //         rows[i].created_at = showTime(rows[i].created_at);
+    //     }
+    //     io.sockets.emit("wallPosts", rows);
+    // };
+
+    // getWallPosts(userId);
 
     socket.on("newMessage", (msg) => {
         return db.addMessage(msg, userId).then(({ rows }) => {

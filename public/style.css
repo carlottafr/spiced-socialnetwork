@@ -108,7 +108,9 @@ body {
     .chat,
     .chat textarea,
     .chat-header,
-    .chatmsg-container {
+    .chatmsg-container,
+    .wall,
+    .wall textarea {
         border-radius: 0.3em;
     }
 
@@ -154,9 +156,13 @@ body {
     }
 
     .chat textarea {
-        margin-top: 10px;
         width: 580px;
         margin-left: 50px;
+    }
+
+    .chat textarea,
+    .wall textarea {
+        margin-top: 10px;
         padding: 10px;
         resize: none;
         overflow-y: scroll;
@@ -164,7 +170,8 @@ body {
 
     .chat textarea,
     .chat-header,
-    .chatmsg-container {
+    .chatmsg-container,
+    .wall textarea {
         border: 1px solid darkslategray;
     }
 
@@ -182,12 +189,16 @@ body {
     }
 
     .chatmsg-container {
-        padding: 10px;
+        margin-top: 10px;
         height: 280px;
+    }
+
+    .chatmsg-container,
+    .wall-container {
+        padding: 10px;
         width: 580px;
         overflow-y: scroll;
         margin: 0 auto;
-        margin-top: 10px;
     }
 
     .date-msg-container {
@@ -223,7 +234,8 @@ body {
         margin: 10px;
     }
 
-    .yesbtn {
+    .yesbtn,
+    .wall button {
         background: #00c49a;
     }
 
@@ -244,6 +256,7 @@ body {
     .friends button,
     .fsbuttons button,
     .uploader .yesbtn,
+    .wall button,
     .wannabes button,
     #inputlabel {
         color: white;
@@ -354,14 +367,16 @@ body {
         grid-column: 2 / 3;
     }
 
-    .message-unit .avatar-wrapper {
+    .message-unit .avatar-wrapper,
+    .wall-container .message-unit .avatar-wrapper {
         width: 50px;
         height: 50px;
         padding: 0;
         margin-top: 5px;
     }
 
-    .message-unit .avatar {
+    .message-unit .avatar,
+    .wall-container .message-unit .avatar {
         width: 40px;
         height: 40px;
         margin: 5px;
@@ -384,6 +399,7 @@ body {
     .otherprofile .wall,
     .profile .wall {
         grid-column: 3 / 4;
+        grid-row: 2;
     }
 
     .otherprofile h1,
@@ -449,7 +465,8 @@ body {
     }
 
     .uploader label,
-    .uploader .yesbtn {
+    .uploader .yesbtn,
+    .wall button {
         font-size: 18px;
         font-weight: lighter;
         width: 90px;
@@ -475,6 +492,28 @@ body {
     .friends div {
         margin: 10px;
         text-align: center;
+    }
+
+    .wall {
+        width: 600px;
+        height: 350px;
+        background: white;
+        padding: 10px;
+    }
+
+    .wall button {
+        float: right;
+        margin-top: 12px;
+        margin-right: 5px;
+    }
+
+    .wall textarea {
+        width: 510px;
+        margin: 10px;
+    }
+
+    .wall-container {
+        height: 250px;
     }
 
     .wannabes,

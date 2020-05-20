@@ -58,7 +58,7 @@ export default class OtherProfile extends Component {
                     otherId={this.props.match.params.id}
                     friendshipCheck={(arg) => this.friendshipCheck(arg)}
                 />
-                {this.state.friend && <Wall />}
+                {this.state.friend && <Wall id={this.props.match.params.id} />}
             </div>
         );
     }

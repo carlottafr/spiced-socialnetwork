@@ -49,5 +49,22 @@ export default function reducer(state = {}, action) {
         // console.log(state);
     }
 
+    if (action.type == "GET_WALL_POSTS") {
+        state = {
+            ...state,
+            wallPosts: action.posts,
+        };
+        console.log("action.posts: ", action.posts);
+        console.log("I'm in reducer.js");
+        console.log(state);
+    }
+
+    if (action.type == "ADD_WALL_POST") {
+        state = {
+            ...state,
+            wallPosts: [action.post, ...state.wallPosts],
+        };
+    }
+
     return state;
 }
