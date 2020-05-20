@@ -412,7 +412,10 @@ app.post("/api/friendship/:id", (req, res) => {
         return db
             .cancelFriend(id, req.session.userId)
             .then(() => {
-                res.json({ text: "Send Friend Request" });
+                res.json({
+                    text: "Send Friend Request",
+                    friendship: false,
+                });
             })
             .catch((err) => {
                 console.log("Error in db.cancelFriend: ", err);
@@ -421,7 +424,10 @@ app.post("/api/friendship/:id", (req, res) => {
         return db
             .acceptFriend(id, req.session.userId)
             .then(() => {
-                res.json({ text: "End Friendship" });
+                res.json({
+                    text: "End Friendship",
+                    friendship: true,
+                });
             })
             .catch((err) => {
                 console.log("Error in db.acceptFriend: ", err);
@@ -434,7 +440,11 @@ app.post("/api/friendship/:id", (req, res) => {
 app.get("/friends-wannabes", async (req, res) => {
     try {
         const { rows } = await db.getFriendsWannabes(req.session.userId);
-        // console.log(rows);
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].created_at = showTime(rows[i].created_at);
+            let data = await db.getAvatar([rows[i].id]);
+            rows[i].image = data.rows[0].image;
+        }
         res.json(rows);
     } catch (err) {
         console.log("Error in db.getFriendsWannabes: ", err);

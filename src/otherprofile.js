@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
 import FriendshipButton from "./friendbutton";
+import Wall from "./wall";
 
-class OtherProfile extends Component {
+export default class OtherProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
             sameUser: false,
+            friend: false,
         };
     }
 
@@ -33,6 +35,13 @@ class OtherProfile extends Component {
         });
     }
 
+    friendshipCheck(arg) {
+        this.setState({
+            friend: arg,
+        });
+        console.log("friendshipCheck fired!");
+    }
+
     render() {
         return (
             <div className="otherprofile">
@@ -45,10 +54,12 @@ class OtherProfile extends Component {
                     avatar={this.state.avatar}
                 />
                 <p className="showbio">{this.state.bio}</p>
-                <FriendshipButton otherId={this.props.match.params.id} />
+                <FriendshipButton
+                    otherId={this.props.match.params.id}
+                    friendshipCheck={(arg) => this.friendshipCheck(arg)}
+                />
+                {this.state.friend && <Wall />}
             </div>
         );
     }
 }
-
-export default OtherProfile;

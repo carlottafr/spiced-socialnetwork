@@ -1,6 +1,7 @@
 import React from "react";
 import ProfilePic from "./profilepic";
 import BioEditor from "./bioeditor";
+import Wall from "./wall";
 
 export default function Profile({
     first,
@@ -25,6 +26,7 @@ export default function Profile({
                 </h2>
             </div>
             <BioEditor bio={bio} saveBio={saveBio} />
+            <Wall />
         </div>
     );
 }

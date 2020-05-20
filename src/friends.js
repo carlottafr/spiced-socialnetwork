@@ -44,7 +44,7 @@ export default function Friends() {
                                 <ProfilePic
                                     first={wannabe.first}
                                     last={wannabe.last}
-                                    // imageUrl={wannabe.image_url}
+                                    avatar={wannabe.image}
                                 />
                                 <div>
                                     {wannabe.first} {wannabe.last}
@@ -81,7 +81,7 @@ export default function Friends() {
                                 <ProfilePic
                                     first={friend.first}
                                     last={friend.last}
-                                    // imageUrl={friend.image_url}
+                                    avatar={friend.image}
                                 />
                                 <div>
                                     {friend.first} {friend.last}

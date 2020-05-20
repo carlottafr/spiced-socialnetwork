@@ -9,15 +9,15 @@ export default class Uploader extends React.Component {
         };
     }
 
-    componentDidMount() {
-        console.log("Uploader mounted");
-    }
+    // componentDidMount() {
+    //     console.log("Uploader mounted");
+    // }
 
     handleChange(e) {
         this.setState({
             file: e.target.files[0],
+            fileName: e.target.files[0].name,
         });
-        console.log("This is the current file: ", this.file);
     }
 
     uploadPicture() {
@@ -28,7 +28,6 @@ export default class Uploader extends React.Component {
         axios
             .post("/avatar-upload", formData)
             .then(({ data }) => {
-                console.log("This is the wanted object: ", data.image);
                 this.props.receivePicture(data.image);
                 this.props.toggleModal();
             })
@@ -38,7 +37,6 @@ export default class Uploader extends React.Component {
     }
 
     closeModal() {
-        console.log("The modal is to be closed");
         this.props.toggleModal();
     }
 
@@ -49,13 +47,21 @@ export default class Uploader extends React.Component {
                     <p id="x" onClick={() => this.closeModal()}>
                         X
                     </p>
+                    <h2>Change your Avatar</h2>
                     <input
                         onChange={(e) => this.handleChange(e)}
                         name="file"
+                        id="file"
+                        className="inputfile"
                         type="file"
                         accept="jpg/*"
                     />
-                    <button onClick={() => this.uploadPicture()}>Upload</button>
+                    <label htmlFor="file" id="inputlabel">
+                        Choose
+                    </label>
+                    <p className="yesbtn" onClick={() => this.uploadPicture()}>
+                        Upload
+                    </p>
                 </div>
             </div>
         );

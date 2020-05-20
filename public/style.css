@@ -48,7 +48,8 @@ body {
 .friends div a,
 .nav div a,
 .users div a,
-.wannabes div a {
+.wannabes div a,
+#inputlabel {
     text-decoration: none;
     text-transform: uppercase;
 }
@@ -65,7 +66,7 @@ body {
 
 .uploader {
     width: 40%;
-    height: 50%;
+    height: 30%;
     background: sandybrown;
     margin: 0 auto;
     border-radius: 0.7em;
@@ -235,8 +236,17 @@ body {
     .friends button,
     .fsbuttons button,
     .wannabes button {
-        color: white;
         width: 164px;
+    }
+
+    .data button,
+    .enterbio button,
+    .friends button,
+    .fsbuttons button,
+    .uploader .yesbtn,
+    .wannabes button,
+    #inputlabel {
+        color: white;
         padding: 10px;
         border-radius: 0.3em;
         border: none;
@@ -269,6 +279,15 @@ body {
         width: 140px;
         height: auto;
         grid-column: 1 / 2;
+    }
+
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
     }
 
     .nav {
@@ -358,8 +377,13 @@ body {
     .profile {
         margin: 20px;
         display: grid;
-        grid-template-columns: 210px 400px;
+        grid-template-columns: 210px 350px 1fr;
         grid-template-rows: 70px 50px 160px;
+    }
+
+    .otherprofile .wall,
+    .profile .wall {
+        grid-column: 3 / 4;
     }
 
     .otherprofile h1,
@@ -410,7 +434,6 @@ body {
     }
 
     .data .yesbtn {
-        margin-top: 10px;
         width: 80px;
     }
 
@@ -422,6 +445,24 @@ body {
         margin-top: 3%;
         padding: 20px;
         z-index: 5;
+        text-align: center;
+    }
+
+    .uploader label,
+    .uploader .yesbtn {
+        font-size: 18px;
+        font-weight: lighter;
+        width: 90px;
+        margin: 0 auto;
+    }
+
+    .uploader h2 {
+        margin: 20px;
+    }
+
+    .uploader .yesbtn {
+        margin-top: 10px;
+        padding: 8px 0 8px 0;
     }
 
     .users {
@@ -458,5 +499,9 @@ body {
         position: absolute;
         bottom: 5px;
         font-size: 12px;
+    }
+
+    #inputlabel {
+        background: #40798c;
     }
 }

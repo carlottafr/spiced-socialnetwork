@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
 
-export default function FriendshipButton({ otherId }) {
+export default function FriendshipButton({ otherId, friendshipCheck }) {
     const [buttonText, setButtonText] = useState("");
     const [decline, setDeclineText] = useState("");
     const [declineButton, setDeclineButton] = useState(false);
@@ -14,6 +14,13 @@ export default function FriendshipButton({ otherId }) {
                     setDeclineButton(true);
                 }
                 setButtonText(data.text);
+                if (data.text === "End Friendship") {
+                    friendshipCheck(true);
+                    console.log("friendshipCheck true sent out!");
+                } else {
+                    friendshipCheck(false);
+                    console.log("friendshipCheck false sent out!");
+                }
             })
             .catch((err) => {
                 console.log("Error in axios.get.friendstatus: ", err);
@@ -25,6 +32,11 @@ export default function FriendshipButton({ otherId }) {
                 text: buttonText,
             })
             .then(({ data }) => {
+                if (data.friendship) {
+                    friendshipCheck(true);
+                } else {
+                    friendshipCheck(false);
+                }
                 setButtonText(data.text);
                 setDeclineButton(false);
             })

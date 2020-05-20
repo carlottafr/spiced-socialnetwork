@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS chats;
 DROP TABLE IF EXISTS reset_codes;
 DROP TABLE IF EXISTS friendships;
+DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS users CASCADE;
 
@@ -20,6 +21,14 @@ CREATE TABLE images(
     image TEXT,
     descr TEXT,
     uploader_id INT NOT NULL REFERENCES users(id)
+);
+
+CREATE TABLE posts(
+    id SERIAL PRIMARY KEY,
+    text TEXT,
+    poster_id INT NOT NULL REFERENCES users(id),
+    receiver_id INT NOT NULL REFERENCES users(id),
+    image_id INT REFERENCES images(id)
 );
 
 CREATE TABLE friendships(
@@ -249,3 +258,5 @@ INSERT INTO images (image, descr, uploader_id) VALUES ('https://m.media-amazon.c
 ('https://images.pexels.com/photos/47080/boy-african-africa-child-47080.jpeg?h=350&auto=compress&cs=tinysrgb', 'avatar', 200),
 ('https://s3.amazonaws.com/spicedling/9iH2tMgGHXkh9oOGcRc5Tq-KR6TAuNfI.png', 'avatar', 201),
 ('https://s3.amazonaws.com/spicedling/eli4POf9_m2BAPKAQsPmC12o7mXpDnyE.png', 'avatar', 202);
+
+INSERT INTO posts (text, poster_id, receiver_id) VALUES ('I didn''t know you were a plant enthusiast, what a strange surprise. 🤨', 202, 201), ('Your "tips" on how to care for my fern with vodka totally backfired, thanks for that! 🤬', 193, 201), ('Do you have a contact for cheap monstera variegata cuttings? 😇', 79, 201), ('How on earth did you kill a cactus? 😳', 46, 201);

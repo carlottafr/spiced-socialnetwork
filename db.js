@@ -112,7 +112,7 @@ module.exports.getFriendsWannabes = (id) => {
     return db.query(
         `SELECT users.id, first, last, accepted 
         FROM friendships 
-        INNER JOIN users 
+        JOIN users 
         ON (accepted = false AND receiver_id = $1 AND sender_id = users.id) 
         OR (accepted = true AND receiver_id = $1 AND sender_id = users.id) 
         OR (accepted = true AND sender_id = $1 AND receiver_id = users.id);`,
@@ -134,5 +134,33 @@ module.exports.addMessage = (message, sender_id) => {
     return db.query(
         `INSERT INTO chats (message, sender_id) VALUES ($1, $2) RETURNING *;`,
         [message, sender_id]
+    );
+};
+
+module.exports.getWallPosts = (id) => {
+    return db.query(
+        `SELECT poster_id, text, first, last, image 
+        FROM posts 
+        INNER JOIN users 
+        ON (receiver_id = $1 AND poster_id = users.id) 
+        INNER JOIN images 
+        ON (poster_id = uploader_id);`,
+        [id]
+    );
+};
+
+module.exports.addWallPost = (text, poster_id, receiver_id) => {
+    return db.query(
+        `INSERT INTO posts (text, poster_id, receiver_id) 
+        VALUES ($1, $2, $3) RETURNING *;`,
+        [text, poster_id, receiver_id]
+    );
+};
+
+module.exports.addWallImage = (poster_id, receiver_id, image_id) => {
+    return db.query(
+        `INSERT INTO posts (poster_id, receiver_id, image_id) 
+        VALUES ($1, $2, $3) RETURNING *;`,
+        [poster_id, receiver_id, image_id]
     );
 };
