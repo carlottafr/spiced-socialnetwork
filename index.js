@@ -250,7 +250,6 @@ app.get("/user", (req, res) => {
 app.post("/avatar-upload", uploader.single("file"), s3.upload, (req, res) => {
     let awsUrl = config.s3Url;
     awsUrl += req.file.filename;
-
     if (req.file) {
         return db
             .addImage(awsUrl, "avatar", req.session.userId)
