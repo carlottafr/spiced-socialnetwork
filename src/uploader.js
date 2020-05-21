@@ -9,10 +9,6 @@ export default class Uploader extends React.Component {
         };
     }
 
-    // componentDidMount() {
-    //     console.log("Uploader mounted");
-    // }
-
     handleChange(e) {
         this.setState({
             file: e.target.files[0],

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { wallPosts, wallPost } from "./actions";
+import { imagePost, wallPosts, wallPost } from "./actions";
 // import { socket } from "./socket";
 import ProfilePic from "./profilepic";
 
 export default function Wall({ id }) {
     const dispatch = useDispatch();
+    const [file, setFile] = useState(null);
 
     useEffect(() => {
         dispatch(wallPosts(id));
@@ -19,7 +20,6 @@ export default function Wall({ id }) {
         if (e.key === "Enter") {
             // prevent jumping to the next line
             e.preventDefault();
-            console.log(e.target.value);
             dispatch(wallPost(e.target.value, id));
             e.target.value = "";
         }
@@ -42,7 +42,14 @@ export default function Wall({ id }) {
                             </Link>
                             <div className="date-msg-container">
                                 <div className="date">{post.created_at}</div>
-                                <div className="message-text">{post.text}</div>
+                                <div className="message-text">
+                                    {post.text && post.text}
+                                    {post.picture && (
+                                        <div className="imagepost">
+                                            <img src={post.picture} />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -54,6 +61,25 @@ export default function Wall({ id }) {
                 placeholder="Add your message here and press enter"
                 onKeyDown={(e) => keyCheck(e)}
             />
+            <div className="pic-upload-container">
+                <input
+                    onChange={(e) => setFile(e.target.files[0])}
+                    name="file"
+                    id="file"
+                    className="inputfile"
+                    type="file"
+                    accept="jpg/*"
+                />
+                <label htmlFor="file" id="inputlabel">
+                    Choose Picture
+                </label>
+                <div
+                    id="inputlabel"
+                    onClick={() => dispatch(imagePost(file, id))}
+                >
+                    Post Picture
+                </div>
+            </div>
         </div>
     );
 }

@@ -261,3 +261,5 @@ INSERT INTO images (image, descr, uploader_id) VALUES ('https://m.media-amazon.c
 ('https://s3.amazonaws.com/spicedling/eli4POf9_m2BAPKAQsPmC12o7mXpDnyE.png', 'avatar', 202);
 
 INSERT INTO posts (text, poster_id, receiver_id) VALUES ('I didn''t know you were a plant enthusiast, what a strange surprise. 🤨', 202, 201), ('Your "tips" on how to care for my fern with vodka totally backfired, thanks for that! 🤬', 193, 201), ('Do you have a contact for cheap monstera variegata cuttings? 😇', 79, 201), ('How on earth did you kill a cactus? 😳', 46, 201);
+
+INSERT INTO friendships (receiver_id, sender_id, accepted) VALUES (202, 201, true), (193, 201, true), (79, 201, true), (46, 201, true);

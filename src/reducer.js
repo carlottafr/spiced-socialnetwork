@@ -46,7 +46,6 @@ export default function reducer(state = {}, action) {
             ...state,
             chatMessages: [...state.chatMessages, action.msg],
         };
-        // console.log(state);
     }
 
     if (action.type == "GET_WALL_POSTS") {
@@ -54,12 +53,16 @@ export default function reducer(state = {}, action) {
             ...state,
             wallPosts: action.posts,
         };
-        console.log("action.posts: ", action.posts);
-        console.log("I'm in reducer.js");
-        console.log(state);
     }
 
     if (action.type == "ADD_WALL_POST") {
+        state = {
+            ...state,
+            wallPosts: [action.post, ...state.wallPosts],
+        };
+    }
+
+    if (action.type == "ADD_IMAGE_POST") {
         state = {
             ...state,
             wallPosts: [action.post, ...state.wallPosts],

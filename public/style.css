@@ -16,7 +16,8 @@ body {
     background: linen;
 }
 
-.avatar {
+.avatar,
+.message-text .imagepost img {
     margin: 5px;
     object-fit: contain;
     overflow: hidden;
@@ -235,7 +236,7 @@ body {
     }
 
     .yesbtn,
-    .wall button {
+    .wall div#inputlabel {
         background: #00c49a;
     }
 
@@ -256,13 +257,23 @@ body {
     .friends button,
     .fsbuttons button,
     .uploader .yesbtn,
-    .wall button,
+    .wannabes button,
+    label#inputlabel {
+        padding: 10px;
+    }
+
+    .data button,
+    .enterbio button,
+    .friends button,
+    .fsbuttons button,
+    .uploader .yesbtn,
+    .wall div#inputlabel,
     .wannabes button,
     #inputlabel {
         color: white;
-        padding: 10px;
         border-radius: 0.3em;
         border: none;
+        cursor: pointer;
     }
 
     .declinebtn {
@@ -327,6 +338,15 @@ body {
 
     .message-text {
         text-align: justify;
+    }
+
+    .message-text .imagepost {
+        width: 430px;
+        padding: 10px;
+    }
+
+    .message-text .imagepost img {
+        max-width: 400px;
     }
 
     .message-unit,
@@ -453,6 +473,13 @@ body {
         width: 80px;
     }
 
+    .pic-upload-container {
+        display: flex;
+        flex-direction: row;
+        width: 240px;
+        margin: 0 auto;
+    }
+
     .showbio {
         font-size: 18px;
     }
@@ -465,11 +492,22 @@ body {
     }
 
     .uploader label,
-    .uploader .yesbtn,
-    .wall button {
+    .uploader .yesbtn {
         font-size: 18px;
+    }
+    .uploader label,
+    .uploader .yesbtn {
         font-weight: lighter;
+    }
+
+    .uploader label,
+    .uploader .yesbtn {
         width: 90px;
+    }
+
+    .uploader label,
+    .uploader .yesbtn,
+    .wall div#inputlabel {
         margin: 0 auto;
     }
 
@@ -499,16 +537,28 @@ body {
         height: 350px;
         background: white;
         padding: 10px;
+        display: flex;
+        flex-direction: column;
     }
 
-    .wall button {
-        float: right;
-        margin-top: 12px;
-        margin-right: 5px;
+    .wall div#inputlabel {
+        width: 88px;
+    }
+
+    .wall #inputlabel {
+        text-align: center;
+        margin: 0 auto;
+        /* float: right; */
+        /* margin-top: 10px; */
+        padding: 5px;
+        /* margin-right: 5px; */
+        font-size: 12px;
+        font-weight: lighter;
     }
 
     .wall textarea {
-        width: 510px;
+        width: 560px;
+        height: 8px;
         margin: 10px;
     }
 

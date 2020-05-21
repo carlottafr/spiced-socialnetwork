@@ -442,25 +442,31 @@ app.get("/friends-wannabes", async (req, res) => {
 app.get("/api/wall-posts/:id", async (req, res) => {
     const { id } = req.params;
     let data;
-    if (id == "user") {
-        data = await db.getWallPosts(req.session.userId);
-    } else {
-        data = await db.getWallPosts(id);
+    try {
+        if (id == "user") {
+            data = await db.getWallPosts(req.session.userId);
+        } else {
+            data = await db.getWallPosts(id);
+        }
+        let response;
+        for (let i = 0; i < data.rows.length; i++) {
+            if (data.rows[i].image_id != null) {
+                let { rows } = await db.getPicture(data.rows[i].image_id);
+                data.rows[i].picture = rows[0].image;
+            }
+            data.rows[i].created_at = showTime(data.rows[i].created_at);
+            response = await db.getAvatar([data.rows[i].poster_id]);
+            data.rows[i].image = response.rows[0].image;
+        }
+        res.json(data.rows);
+    } catch (err) {
+        console.log("Error in GET /wall-posts: ", err);
     }
-    let response;
-    for (let i = 0; i < data.rows.length; i++) {
-        data.rows[i].created_at = showTime(data.rows[i].created_at);
-        response = await db.getAvatar([data.rows[i].poster_id]);
-        data.rows[i].image = response.rows[0].image;
-    }
-    console.log("data.rows: ", data.rows);
-    res.json(data.rows);
 });
 
 // POST /add-post
 
 app.post("/add-post", async (req, res) => {
-    console.log("index.js line 463 calling in!");
     const { text, id } = req.body;
     let data;
     if (id == "user") {
@@ -479,14 +485,66 @@ app.post("/add-post", async (req, res) => {
         first: rows[0].first,
         last: rows[0].last,
         text: data.rows[0].text,
+        picture: null,
         created_at: showTime(data.rows[0].created_at),
     };
     const response = await db.getAvatar([post.poster_id]);
-    console.log("response: ", response);
-    console.log("post: ", post);
     post.image = response.rows[0].image;
     res.json(post);
 });
+
+// POST /image-post
+
+app.post(
+    "/image-post",
+    uploader.single("file"),
+    s3.upload,
+    async (req, res) => {
+        let awsUrl = config.s3Url;
+        awsUrl += req.file.filename;
+        try {
+            if (req.file) {
+                const { rows } = await db.addImage(
+                    awsUrl,
+                    "post",
+                    req.session.userId
+                );
+                let data;
+                console.log("Image rows: ", rows);
+                if (req.body.id == "user") {
+                    data = await db.addWallImage(
+                        req.session.userId,
+                        req.session.userId,
+                        rows[0].id
+                    );
+                } else {
+                    data = await db.addWallImage(
+                        req.session.userId,
+                        req.body.id,
+                        rows[0].id
+                    );
+                }
+                const response = await db.getUser(data.rows[0].poster_id);
+                let post = {
+                    id: data.rows[0].id,
+                    poster_id: data.rows[0].poster_id,
+                    first: response.rows[0].first,
+                    last: response.rows[0].last,
+                    text: null,
+                    picture: rows[0].image,
+                    created_at: showTime(data.rows[0].created_at),
+                };
+                const avatar = await db.getAvatar([post.poster_id]);
+                post.image = avatar.rows[0].image;
+                res.json(post);
+            } else {
+                res.json({ noPic: true });
+            }
+        } catch (err) {
+            console.log("Error in POST /image-post: ", err);
+        }
+    }
+);
 
 // GET /
 
@@ -515,34 +573,6 @@ io.on("connection", (socket) => {
         return socket.disconnect(true);
     }
 
-    // let onlineUsers = [
-    //     {
-    //         id: userId,
-    //         socketId: socket.id,
-    //     },
-    //     ...
-    //      or
-    //      {
-    //         id: userId,
-    //         socketId: [socketId1, socketId2, ...],
-    //      }
-    //  }
-    // ];
-    // function getUsersByIds(arrayOfIds) {
-    //     const query = `
-    //     SELECT id, first, last, image
-    //     FROM users WHERE id = ANY($1);`;
-    //     // ANY loops through the passed array
-    //     // and returns an array of objects
-    //     return db.query(query, [arrayOfIds]);
-    // }
-
-    // socket.on("disconnect", function () {
-    // do something when user disconnects
-    // from my app
-    // remove the id from onlineUsers
-    // });
-
     let getLastMessages = async () => {
         const { rows } = await db.getLastMessages();
         for (let i = 0; i < rows.length; i++) {
@@ -555,16 +585,6 @@ io.on("connection", (socket) => {
     };
 
     getLastMessages();
-
-    // let getWallPosts = async (id) => {
-    //     const { rows } = await db.getWallPosts(id);
-    //     for (let i = 0; i < rows.length; i++) {
-    //         rows[i].created_at = showTime(rows[i].created_at);
-    //     }
-    //     io.sockets.emit("wallPosts", rows);
-    // };
-
-    // getWallPosts(userId);
 
     socket.on("newMessage", (msg) => {
         return db.addMessage(msg, userId).then(({ rows }) => {

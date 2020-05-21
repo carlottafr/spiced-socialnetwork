@@ -56,6 +56,14 @@ module.exports.getAvatar = (id) => {
     );
 };
 
+module.exports.getPicture = (id) => {
+    return db.query(
+        `SELECT image FROM images 
+        WHERE (id = $1 AND descr = 'post');`,
+        [id]
+    );
+};
+
 module.exports.updateBio = (id, bio) => {
     return db.query(`UPDATE users SET bio = $2 WHERE id = $1 RETURNING bio;`, [
         id,
@@ -139,7 +147,7 @@ module.exports.addMessage = (message, sender_id) => {
 
 module.exports.getWallPosts = (id) => {
     return db.query(
-        `SELECT posts.id AS id, posts.created_at AS created_at, poster_id, text, first, last 
+        `SELECT posts.id AS id, posts.created_at AS created_at, posts.image_id AS image_id, poster_id, text, first, last 
         FROM posts 
         JOIN users 
         ON (receiver_id = $1 AND poster_id = users.id) 
