@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-// import axios from "./axios";
+import React from "react";
 import { HashRouter, Link } from "react-router-dom";
+// custom hooks
 import { useStatefulFields, useAuthSubmit } from "./hooks";
 
 export default function Registration() {
@@ -21,7 +21,8 @@ export default function Registration() {
             </div>
             <HashRouter>
                 <div id="login">
-                    You already have an account?{" "}
+                    You already have an account?
+                    <br />
                     <Link to="/login">You can log in here!</Link>
                 </div>
             </HashRouter>

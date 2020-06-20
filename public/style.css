@@ -209,7 +209,7 @@ body {
     }
 
     .enterbio textarea {
-        width: 380px;
+        width: 320px;
         height: 60px;
     }
 
@@ -501,7 +501,8 @@ body {
     }
 
     .uploader label,
-    .uploader .yesbtn {
+    .uploader .yesbtn,
+    .welcome .yesbtn {
         width: 90px;
     }
 
@@ -580,6 +581,10 @@ body {
 
     .welcome h1 {
         font-size: 24px;
+    }
+
+    .welcome .yesbtn {
+        width: 90px;
     }
 
     #footer {

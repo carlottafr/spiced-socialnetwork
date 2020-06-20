@@ -9,6 +9,6 @@ module.exports.showTime = (posttime) => {
         minute: "numeric",
         second: "numeric",
         hour12: false,
-        timeZone: "Etc/GMT",
+        timeZone: "Etc/GMT-2",
     }).format(posttime));
 };

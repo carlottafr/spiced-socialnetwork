@@ -232,7 +232,9 @@ app.get("/user", (req, res) => {
             return db
                 .getAvatar([req.session.userId])
                 .then(({ rows }) => {
-                    user.image = rows[0].image;
+                    if (rows.length > 0) {
+                        user.image = rows[0].image;
+                    }
                     // console.log("User: ", user);
                     res.json(user);
                 })
